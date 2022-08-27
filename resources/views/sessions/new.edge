@@ -1,0 +1,38 @@
+@layout('layouts/app')
+
+@section('body')
+  <div class="auth-page">
+      <div class="container page">
+          <div class="row">
+
+              <div class="col-md-6 offset-md-3 col-xs-12">
+                  <h1 class="text-xs-center">Sign in</h1>
+                  <p class="text-xs-center">
+                      <a href="{{ route('register') }}">Don't have an account?</a>
+                  </p>
+
+                  @if(flashMessages.has('errors'))
+                    <ul class="error-messages">
+                        @each(error in flashMessages.all().errors)
+                          <li>{{ error }}</li>
+                        @end
+                    </ul>
+                  @endif
+
+                  <form action="{{ route('sessions.create') }}" method="POST">
+                      <fieldset class="form-group">
+                          <input aria-label="email" name="email" id="email" class="form-control form-control-lg" type="text" placeholder="Email">
+                      </fieldset>
+                      <fieldset class="form-group">
+                          <input aria-label="password" name="password" id="password" class="form-control form-control-lg" type="password" placeholder="Password">
+                      </fieldset>
+                      <button class="btn btn-lg btn-primary pull-xs-right">
+                          Sign in
+                      </button>
+                  </form>
+              </div>
+
+          </div>
+      </div>
+  </div>
+@end

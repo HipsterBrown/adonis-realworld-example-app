@@ -1,0 +1,45 @@
+@layout('layouts/app')
+
+@section('body')
+  <div class="settings-page">
+      <div class="container page">
+          <div class="row">
+
+              <div class="col-md-6 offset-md-3 col-xs-12">
+                  <h1 class="text-xs-center">Your Settings</h1>
+
+                  <form action="{{ route('profile.update', { qs: { _method: 'PATCH' } }) }}" method="POST">
+                      <fieldset>
+                          <fieldset class="form-group">
+                              <input aria-label="URL of profile picture" class="form-control" id="avatar" name="avatar" type="text" placeholder="URL of profile picture">
+                          </fieldset>
+                          <fieldset class="form-group">
+                              <input aria-label="your name" class="form-control form-control-lg" name="name" id="name" type="text" placeholder="Your Name">
+                          </fieldset>
+                          <fieldset class="form-group">
+                              <textarea aria-label="short bio about you" name="bio" id="bio" class="form-control form-control-lg" rows="8"
+                                        placeholder="Short bio about you"></textarea>
+                          </fieldset>
+                          <fieldset class="form-group">
+                              <input aria-label="email" class="form-control form-control-lg" type="text" name="email" id="email" value="{{ user.email }}" placeholder="Email">
+                          </fieldset>
+                          <fieldset class="form-group">
+                              <input aria-label="new password" class="form-control form-control-lg" type="password" id="password" name="password" placeholder="New Password">
+                          </fieldset>
+                          <button class="btn btn-lg btn-primary pull-xs-right" type="submit">
+                              Update Settings
+                          </button>
+                      </fieldset>
+                  </form>
+
+                  <hr />
+
+                  <form action="{{ route('sessions.destroy', { qs: { _method: 'DELETE' }}) }}" method="POST">
+                    <button class="btn btn-outline-danger" type="submit">Or click here to logout.</button>
+                  </form>
+              </div>
+
+          </div>
+      </div>
+  </div>
+@end

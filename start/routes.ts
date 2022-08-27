@@ -20,6 +20,17 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', async ({ view }) => {
-  return view.render('welcome')
-})
+Route.get('/', 'ArticlesController.index')
+
+Route.get('/register', 'UsersController.new').as('register')
+Route.post('/users', 'UsersController.create').as('users.create')
+
+Route.get('/login', 'SessionsController.new').as('login')
+Route.post('/sessions', 'SessionsController.create').as('sessions.create')
+
+Route.group(() => {
+  Route.get('/settings', 'ProfilesController.edit').as('settings')
+  Route.patch('/profile', 'ProfilesController.update').as('profile.update')
+
+  Route.delete('/sessions', 'SessionsController.destroy').as('sessions.destroy')
+}).middleware('auth')
