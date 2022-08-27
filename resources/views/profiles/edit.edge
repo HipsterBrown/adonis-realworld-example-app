@@ -8,20 +8,28 @@
               <div class="col-md-6 offset-md-3 col-xs-12">
                   <h1 class="text-xs-center">Your Settings</h1>
 
-                  <form action="{{ route('profile.update', { qs: { _method: 'PATCH' } }) }}" method="POST">
+                  @if(flashMessages.has('errors'))
+                    <ul class="error-messages">
+                        @each(error in flashMessages.all().errors)
+                          <li>{{ error }}</li>
+                        @end
+                    </ul>
+                  @endif
+
+                  <form action="{{ route('profile.update', {}, { qs: { _method: 'PATCH' } }) }}" method="POST">
                       <fieldset>
                           <fieldset class="form-group">
-                              <input aria-label="URL of profile picture" class="form-control" id="avatar" name="avatar" type="text" placeholder="URL of profile picture">
+                              <input aria-label="URL of profile picture" value="{{ profile.avatar }}" class="form-control" id="avatar" name="avatar" type="url" placeholder="URL of profile picture">
                           </fieldset>
                           <fieldset class="form-group">
-                              <input aria-label="your name" class="form-control form-control-lg" name="name" id="name" type="text" placeholder="Your Name">
+                              <input aria-label="your name" value="{{ profile.name }}" class="form-control form-control-lg" name="name" id="name" type="text" placeholder="Your Name">
                           </fieldset>
                           <fieldset class="form-group">
                               <textarea aria-label="short bio about you" name="bio" id="bio" class="form-control form-control-lg" rows="8"
-                                        placeholder="Short bio about you"></textarea>
+                                        placeholder="Short bio about you">{{ profile.bio }}</textarea>
                           </fieldset>
                           <fieldset class="form-group">
-                              <input aria-label="email" class="form-control form-control-lg" type="text" name="email" id="email" value="{{ user.email }}" placeholder="Email">
+                              <input aria-label="email" class="form-control form-control-lg" type="text" name="email" id="email" value="{{ profile.user.email }}" placeholder="Email">
                           </fieldset>
                           <fieldset class="form-group">
                               <input aria-label="new password" class="form-control form-control-lg" type="password" id="password" name="password" placeholder="New Password">

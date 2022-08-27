@@ -10,9 +10,11 @@ export default class UsersController {
   }
 
   public async create({ auth, request, response }: HttpContextContract) {
-    const { email, password } = await request.validate(CreateUserValidator)
+    const { email, password, name } = await request.validate(CreateUserValidator)
 
     const user = await User.create({ email, password })
+    await user.related('profile').create({ name })
+
     await auth.login(user)
 
     return response.redirect().toPath('/')
