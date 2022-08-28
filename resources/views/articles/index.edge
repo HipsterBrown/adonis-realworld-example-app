@@ -25,6 +25,26 @@
                       </ul>
                   </div>
 
+                  @each(article in articles)
+                    <div class="article-preview">
+                        <div class="article-meta">
+                            <a href="profile.html"><img src="http://i.imgur.com/Qr71crq.jpg"/></a>
+                            <div class="info">
+                                <a href="" class="author">Eric Simons</a>
+                                <span class="date">January 20th</span>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm pull-xs-right">
+                                <i class="ion-heart"></i> 29
+                            </button>
+                        </div>
+                        <a href="{{ route('articles.show', article) }}" class="preview-link">
+                            <h1>{{ article.title }}</h1>
+                            <p>{{ article.description }}</p>
+                            <span>Read more...</span>
+                        </a>
+                    </div>
+                  @end
+
                   <div class="article-preview">
                       <div class="article-meta">
                           <a href="profile.html"><img src="http://i.imgur.com/Qr71crq.jpg"/></a>

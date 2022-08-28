@@ -28,9 +28,14 @@ Route.post('/users', 'UsersController.create').as('users.create')
 Route.get('/login', 'SessionsController.new').as('login')
 Route.post('/sessions', 'SessionsController.create').as('sessions.create')
 
+Route.get('/articles/:slug', 'ArticlesController.show').as('articles.show')
+
 Route.group(() => {
   Route.get('/settings', 'ProfilesController.edit').as('settings')
   Route.patch('/profile', 'ProfilesController.update').as('profile.update')
 
   Route.delete('/sessions', 'SessionsController.destroy').as('sessions.destroy')
+
+  Route.get('/editor', 'ArticlesController.new').as('editor')
+  Route.post('/articles', 'ArticlesController.create').as('articles.create')
 }).middleware('auth')

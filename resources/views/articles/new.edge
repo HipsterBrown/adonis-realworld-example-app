@@ -1,0 +1,35 @@
+@layout('layouts/app')
+
+@section('body')
+  <div class="editor-page">
+      <div class="container page">
+          <div class="row">
+
+              <div class="col-md-10 offset-md-1 col-xs-12">
+                  <form action="{{ route('articles.create') }}" method="POST">
+                      <fieldset>
+                          <fieldset class="form-group">
+                              <input type="text" name="title" id="title" aria-label="article title" class="form-control form-control-lg" placeholder="Article Title">
+                          </fieldset>
+                          <fieldset class="form-group">
+                              <input type="text" name="description" id="description" aria-label="What's this article about?" class="form-control" placeholder="What's this article about?">
+                          </fieldset>
+                          <fieldset class="form-group">
+                              <textarea class="form-control" rows="8" id="body" name="body" aria-label="article content"
+                                        placeholder="Write your article (in markdown)"></textarea>
+                          </fieldset>
+                          <fieldset class="form-group">
+                              <input type="text" id="tags" name="tags" aria-label="enter tags (comma separated)" class="form-control" placeholder="Enter tags">
+                              <div class="tag-list"></div>
+                          </fieldset>
+                          <button class="btn btn-lg pull-xs-right btn-primary" type="submit">
+                              Publish Article
+                          </button>
+                      </fieldset>
+                  </form>
+              </div>
+
+          </div>
+      </div>
+  </div>
+@end

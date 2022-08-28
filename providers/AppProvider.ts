@@ -1,4 +1,6 @@
 import { ApplicationContract } from '@ioc:Adonis/Core/Application'
+import sanitizeHTML from 'sanitize-html'
+import { marked } from 'marked'
 
 export default class AppProvider {
   constructor(protected app: ApplicationContract) {}
@@ -8,7 +10,10 @@ export default class AppProvider {
   }
 
   public async boot() {
-    // IoC container is ready
+    const View = this.app.container.use('Adonis/Core/View')
+    View.global('markdownToHTML', (content: string) => {
+      return sanitizeHTML(marked(content))
+    })
   }
 
   public async ready() {
