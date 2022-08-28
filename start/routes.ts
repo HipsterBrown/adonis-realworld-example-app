@@ -37,5 +37,9 @@ Route.group(() => {
   Route.delete('/sessions', 'SessionsController.destroy').as('sessions.destroy')
 
   Route.get('/editor', 'ArticlesController.new').as('editor')
+  Route.get('/editor/:slug', 'ArticlesController.edit').as('articles.edit')
+
   Route.post('/articles', 'ArticlesController.create').as('articles.create')
+  Route.patch('/articles/:slug', 'ArticlesController.update').as('articles.update')
+  Route.delete('/articles/:slug', 'ArticlesController.destroy').as('articles.destroy')
 }).middleware('auth')

@@ -14,6 +14,22 @@
                       <a href="" class="author">Eric Simons</a>
                       <span class="date">January 20th</span>
                   </div>
+
+                @if(article.user.id === auth.user?.id)
+                  <a href="{{ route('articles.edit', article) }}" class="btn btn-sm btn-outline-secondary">
+                      <i class="ion-edit"></i>
+                      &nbsp;
+                      Edit Article
+                  </a>
+                  &nbsp;&nbsp;
+                  <form method="POST" action="{{ route('articles.destroy', article, { qs: { _method: 'DELETE' } }) }}" style="display:inline;">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                        <i class="ion-trash-a"></i>
+                        &nbsp;
+                        Delete Article
+                    </button>
+                  </form>
+                @else
                   <button class="btn btn-sm btn-outline-secondary">
                       <i class="ion-plus-round"></i>
                       &nbsp;
@@ -25,6 +41,7 @@
                       &nbsp;
                       Favorite Post <span class="counter">(29)</span>
                   </button>
+                @end
               </div>
 
           </div>
@@ -48,17 +65,33 @@
                       <span class="date">January 20th</span>
                   </div>
 
+                @if(article.user.id === auth.user?.id)
+                  <a href="{{ route('articles.edit', article) }}" class="btn btn-sm btn-outline-secondary">
+                      <i class="ion-edit"></i>
+                      &nbsp;
+                      Edit Article
+                  </a>
+                  &nbsp;&nbsp;
+                  <form method="POST" action="{{ route('articles.destroy', article, { qs: { _method: 'DELETE' } }) }}" style="display:inline;">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                        <i class="ion-trash-a"></i>
+                        &nbsp;
+                        Delete Article
+                    </button>
+                  </form>
+                @else
                   <button class="btn btn-sm btn-outline-secondary">
                       <i class="ion-plus-round"></i>
                       &nbsp;
-                      Follow Eric Simons
+                      Follow Eric Simons <span class="counter">(10)</span>
                   </button>
-                  &nbsp;
+                  &nbsp;&nbsp;
                   <button class="btn btn-sm btn-outline-primary">
                       <i class="ion-heart"></i>
                       &nbsp;
                       Favorite Post <span class="counter">(29)</span>
                   </button>
+                @end
               </div>
           </div>
 
