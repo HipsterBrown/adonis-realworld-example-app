@@ -5,7 +5,7 @@ Built using [AdonisJS](https://adonisjs.com)
 TODO:
 
 - [X] add article editing, deleting
-- [ ] add tags table, relationship w/ articles
+- [X] add tags table, relationship w/ articles
 - [ ] add profile show view with user articles, favorited articles
 - [ ] add comments to articles
 - [ ] add favorites to articles

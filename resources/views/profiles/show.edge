@@ -1,0 +1,68 @@
+@layout('layouts/app')
+
+@section('body')
+  <div class="profile-page">
+
+      <div class="user-info">
+          <div class="container">
+              <div class="row">
+
+                  <div class="col-xs-12 col-md-10 offset-md-1">
+                      <img src="{{ profile.avatar }}" class="user-img"/>
+                      <h4>{{ profile.name }}</h4>
+                      <p>{{ profile.bio }}</p>
+                      @if(profile.user.id !== auth.user?.id)
+                        <button class="btn btn-sm btn-outline-secondary action-btn">
+                            <i class="ion-plus-round"></i>
+                            &nbsp;
+                            Follow {{ profile.name }}
+                        </button>
+                      @endif
+                  </div>
+
+              </div>
+          </div>
+      </div>
+
+      <div class="container">
+          <div class="row">
+
+              <div class="col-xs-12 col-md-10 offset-md-1">
+                  <div class="articles-toggle">
+                      <ul class="nav nav-pills outline-active">
+                          <li class="nav-item">
+                              <a class="nav-link active" href="{{ route('profiles.show', profile) }}">My Articles</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link" href="{{ route('profiles.show.favorites', profile) }}">Favorited Articles</a>
+                          </li>
+                      </ul>
+                  </div>
+
+                  @each(article in articles)
+                    <div class="article-preview">
+                        <div class="article-meta">
+                          <a href="{{ route('profiles.show', article.profile) }}"><img src="{{ article.profile.avatar }}"/></a>
+                            <div class="info">
+                                <a href="{{ route('profiles.show', article.profile )}}" class="author">{{ article.profile.name }}</a>
+                                <span class="date">{{ article.createdAt }}</span>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm pull-xs-right">
+                                <i class="ion-heart"></i> 29
+                            </button>
+                        </div>
+                        <a href="{{ route('articles.show', article) }}" class="preview-link">
+                            <h1>{{ article.title }}</h1>
+                            <p>{{ article.description }}</p>
+                            <span>Read more...</span>
+                        </a>
+                    </div>
+                  @end
+
+              </div>
+
+          </div>
+      </div>
+
+  </div>
+@end

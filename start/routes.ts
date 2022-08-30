@@ -30,6 +30,9 @@ Route.post('/sessions', 'SessionsController.create').as('sessions.create')
 
 Route.get('/articles/:slug', 'ArticlesController.show').as('articles.show')
 
+Route.get('/profiles/:name', 'ProfilesController.show').as('profiles.show')
+Route.get('/profiles/:name/favorites', 'ProfilesController.show').as('profiles.show.favorites')
+
 Route.group(() => {
   Route.get('/settings', 'ProfilesController.edit').as('settings')
   Route.patch('/profile', 'ProfilesController.update').as('profile.update')

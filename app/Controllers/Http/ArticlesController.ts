@@ -6,9 +6,11 @@ import CreateArticleValidator from '../../Validators/CreateArticleValidator'
 export default class ArticlesController {
   public async index({ view, request }: HttpContextContract) {
     const { filterBy, tag } = request.qs()
-    const articles = await Article.query().if(filterBy === 'tag' && !!tag, (query) =>
-      query.whereHas('tags', (tagsQuery) => tagsQuery.where('value', tag))
-    )
+    const articles = await Article.query()
+      .if(filterBy === 'tag' && !!tag, (query) =>
+        query.whereHas('tags', (tagsQuery) => tagsQuery.where('value', tag))
+      )
+      .preload('user', (userQuery) => userQuery.preload('profile'))
     const tags = await Tag.all()
     return view.render('articles/index', { articles, tags })
   }
@@ -19,14 +21,14 @@ export default class ArticlesController {
 
   public async create({ auth, request, response }: HttpContextContract) {
     const { tags, ...values } = await request.validate(CreateArticleValidator)
-    const article: Article = await auth.user.related('articles').create(values)
+    const article = await auth.user?.related('articles').create(values)
 
     if (tags) {
       const relatedTags = await Tag.fetchOrCreateMany(
         'value',
         tags.split(',').map((value) => ({ value: value.trim() }))
       )
-      await article.related('tags').sync(relatedTags.map(({ id }) => id))
+      await article?.related('tags').sync(relatedTags.map(({ id }) => id))
     }
 
     return response.redirect().toRoute('articles.show', article)
@@ -34,19 +36,18 @@ export default class ArticlesController {
 
   public async show({ request, view }: HttpContextContract) {
     const article = await Article.findBy('slug', request.param('slug'))
-    await article?.load('user')
-    await article?.user.load('profile')
+    await article?.load('user', (loader) => loader.preload('profile'))
     return view.render('articles/show', { article })
   }
 
   public async edit({ auth, request, view, session, response }: HttpContextContract) {
-    const article: Article | null = await auth.user
-      .related('articles')
+    const article = await auth.user
+      ?.related('articles')
       .query()
       .where('slug', request.param('slug'))
       .first()
 
-    if (article === null) {
+    if (!article) {
       session.flashMessages.set('error', 'Unauthorized access of editor')
       return response.redirect().toRoute('articles.show', { slug: request.param('slug') })
     }
@@ -56,13 +57,13 @@ export default class ArticlesController {
   }
 
   public async update({ auth, request, session, response }: HttpContextContract) {
-    const article: Article | null = await auth.user
-      .related('articles')
+    const article = await auth.user
+      ?.related('articles')
       .query()
       .where('slug', request.param('slug'))
       .first()
 
-    if (article === null) {
+    if (!article) {
       session.flashMessages.set('error', 'Unauthorized update of article')
     } else {
       const { tags, ...values } = await request.validate(CreateArticleValidator)
@@ -80,13 +81,13 @@ export default class ArticlesController {
   }
 
   public async destroy({ auth, request, session, response }: HttpContextContract) {
-    const article: Article | null = await auth.user
-      .related('articles')
+    const article = await auth.user
+      ?.related('articles')
       .query()
       .where('slug', request.param('slug'))
       .first()
 
-    if (article === null) {
+    if (!article) {
       session.flashMessages.set('error', 'Unauthorized delete of article')
     } else {
       await article.delete()

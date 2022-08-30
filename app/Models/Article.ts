@@ -10,6 +10,7 @@ import {
 import User from './User'
 import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
 import Tag from './Tag'
+import Profile from './Profile'
 
 export default class Article extends BaseModel {
   @column({ isPrimary: true })
@@ -23,6 +24,9 @@ export default class Article extends BaseModel {
 
   @manyToMany(() => Tag)
   public tags: ManyToMany<typeof Tag>
+
+  @belongsTo(() => Profile, { localKey: 'userId', foreignKey: 'userId' })
+  public profile: BelongsTo<typeof Profile>
 
   @column()
   public body: string

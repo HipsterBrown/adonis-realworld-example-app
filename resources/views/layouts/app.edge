@@ -25,6 +25,7 @@
         </li>
 
         @if(auth.isLoggedIn)
+        @set('currentProfile', await auth.user.related('profile').query().first())
         <li class="nav-item">
           <a class="nav-link" href="{{ route('editor') }}">
             <i class="ion-compose"></i>&nbsp;New Article
@@ -33,6 +34,11 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ route('settings') }}">
             <i class="ion-gear-a"></i>&nbsp;Settings
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('profiles.show', currentProfile) }}">
+            {{ currentProfile.name }}
           </a>
         </li>
         @else
