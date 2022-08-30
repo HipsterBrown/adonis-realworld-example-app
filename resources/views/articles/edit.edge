@@ -19,7 +19,7 @@
                                         placeholder="Write your article (in markdown)">{{ article.body }}</textarea>
                           </fieldset>
                           <fieldset class="form-group">
-                              <input type="text" id="tags" name="tags" aria-label="enter tags (comma separated)" class="form-control" placeholder="Enter tags">
+                              <input value="{{ article.tags.map(tag => tag.value).join(', ') }}" type="text" id="tags" name="tags" aria-label="enter tags (comma separated)" class="form-control" placeholder="Enter tags">
                               <div class="tag-list"></div>
                           </fieldset>
                           <button class="btn btn-lg pull-xs-right btn-primary" type="submit">

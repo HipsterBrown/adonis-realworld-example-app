@@ -1,7 +1,15 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  BelongsTo,
+  belongsTo,
+  column,
+  ManyToMany,
+  manyToMany,
+} from '@ioc:Adonis/Lucid/Orm'
 import User from './User'
 import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
+import Tag from './Tag'
 
 export default class Article extends BaseModel {
   @column({ isPrimary: true })
@@ -12,6 +20,9 @@ export default class Article extends BaseModel {
 
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>
+
+  @manyToMany(() => Tag)
+  public tags: ManyToMany<typeof Tag>
 
   @column()
   public body: string

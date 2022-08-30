@@ -1,11 +1,16 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Article from '../../Models/Article'
+import Tag from '../../Models/Tag'
 import CreateArticleValidator from '../../Validators/CreateArticleValidator'
 
 export default class ArticlesController {
-  public async index({ view }: HttpContextContract) {
-    const articles = await Article.all()
-    return view.render('articles/index', { articles })
+  public async index({ view, request }: HttpContextContract) {
+    const { filterBy, tag } = request.qs()
+    const articles = await Article.query().if(filterBy === 'tag' && !!tag, (query) =>
+      query.whereHas('tags', (tagsQuery) => tagsQuery.where('value', tag))
+    )
+    const tags = await Tag.all()
+    return view.render('articles/index', { articles, tags })
   }
 
   public async new({ view }: HttpContextContract) {
@@ -14,13 +19,23 @@ export default class ArticlesController {
 
   public async create({ auth, request, response }: HttpContextContract) {
     const { tags, ...values } = await request.validate(CreateArticleValidator)
-    const article = await auth.user.related('articles').create(values)
+    const article: Article = await auth.user.related('articles').create(values)
+
+    if (tags) {
+      const relatedTags = await Tag.fetchOrCreateMany(
+        'value',
+        tags.split(',').map((value) => ({ value: value.trim() }))
+      )
+      await article.related('tags').sync(relatedTags.map(({ id }) => id))
+    }
+
     return response.redirect().toRoute('articles.show', article)
   }
 
   public async show({ request, view }: HttpContextContract) {
     const article = await Article.findBy('slug', request.param('slug'))
     await article?.load('user')
+    await article?.user.load('profile')
     return view.render('articles/show', { article })
   }
 
@@ -35,6 +50,7 @@ export default class ArticlesController {
       session.flashMessages.set('error', 'Unauthorized access of editor')
       return response.redirect().toRoute('articles.show', { slug: request.param('slug') })
     }
+    await article.load('tags')
 
     return view.render('articles/edit', { article })
   }
@@ -51,6 +67,13 @@ export default class ArticlesController {
     } else {
       const { tags, ...values } = await request.validate(CreateArticleValidator)
       await article.merge(values).save()
+      if (tags) {
+        const relatedTags = await Tag.fetchOrCreateMany(
+          'value',
+          tags.split(',').map((value) => ({ value: value.trim() }))
+        )
+        await article.related('tags').sync(relatedTags.map(({ id }) => id))
+      }
     }
 
     return response.redirect().toRoute('articles.show', { slug: request.param('slug') })
