@@ -35,8 +35,12 @@ export default class ArticlesController {
   }
 
   public async show({ request, view }: HttpContextContract) {
-    const article = await Article.findBy('slug', request.param('slug'))
-    await article?.load('user', (loader) => loader.preload('profile'))
+    const article = await Article.findByOrFail('slug', request.param('slug'))
+    await article.load('user', (loader) => loader.preload('profile'))
+    await article.load('comments', (loader) =>
+      loader.preload('author').orderBy('createdAt', 'desc')
+    )
+
     return view.render('articles/show', { article })
   }
 

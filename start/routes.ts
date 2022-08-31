@@ -45,4 +45,9 @@ Route.group(() => {
   Route.post('/articles', 'ArticlesController.create').as('articles.create')
   Route.patch('/articles/:slug', 'ArticlesController.update').as('articles.update')
   Route.delete('/articles/:slug', 'ArticlesController.destroy').as('articles.destroy')
+
+  Route.post('/articles/:slug/comments', 'CommentsController.create').as('comments.create')
+  Route.get('/articles/:slug/comments/:id', 'CommentsController.edit').as('comments.edit')
+  Route.patch('/articles/:slug/comments/:id', 'CommentsController.update').as('comments.update')
+  Route.delete('/articles/:slug/comments/:id', 'CommentsController.destroy').as('comments.destroy')
 }).middleware('auth')

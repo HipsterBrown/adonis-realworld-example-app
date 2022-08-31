@@ -1,0 +1,28 @@
+@layout('layouts/app')
+
+@section('body')
+  <div class="container page">
+      <div class="row">
+          <div class="col-xs-12 col-md-8 offset-md-2">
+            <h1>Update comment</h1>
+          </div>
+      </div>
+
+      <div class="row">
+          <div class="col-xs-12 col-md-8 offset-md-2">
+              @set('currentProfile', await auth.user.related('profile').query().first())
+                <form class="card comment-form" method="POST" action="{{ route('comments.update', { slug: comment.article.slug, id: comment.id }, { qs: { _method: 'PATCH' }}) }}">
+                  <div class="card-block">
+                    <textarea id="body" name="body" aria-label="Comment body" class="form-control" placeholder="Write a comment..." rows="3">{{ comment.body }}</textarea>
+                  </div>
+                  <div class="card-footer">
+                    <img src="{{ currentProfile.avatar }}" class="comment-author-img"/>
+                      <button type="submit" class="btn btn-sm btn-primary">
+                          Update Comment
+                      </button>
+                  </div>
+              </form>
+          </div>
+      </div>
+  </div>
+@end
