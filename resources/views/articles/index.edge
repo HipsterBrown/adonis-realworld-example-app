@@ -32,9 +32,19 @@
                                 <a href="{{ route('profiles.show', article.user.profile )}}" class="author">{{ article.user.profile.name }}</a>
                                 <span class="date">{{ article.createdAt }}</span>
                             </div>
-                            <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                                <i class="ion-heart"></i> 29
-                            </button>
+                            @if(auth.isLoggedIn && await article.favoritedBy(await auth.user.related('profile').query().firstOrFail()))
+                              <form method="POST" action="{{ route('favorites.destroy', article, { qs: { _method: 'DELETE' } }) }}" style="display:inline">
+                                  <button type="submit" class="btn btn-primary btn-sm pull-xs-right">
+                                      <i class="ion-heart"></i> {{ article.$extras.favorites_count }}
+                                  </button>
+                              </form>
+                            @else
+                              <form method="POST" action="{{ route('favorites.create', article) }}" style="display:inline">
+                                  <button type="submit" class="btn btn-outline-primary btn-sm pull-xs-right">
+                                      <i class="ion-heart"></i> {{ article.$extras.favorites_count }}
+                                  </button>
+                              </form>
+                            @endif
                         </div>
                         <a href="{{ route('articles.show', article) }}" class="preview-link">
                             <h1>{{ article.title }}</h1>

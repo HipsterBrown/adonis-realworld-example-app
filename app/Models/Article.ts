@@ -14,6 +14,7 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
 import Tag from './Tag'
 import Profile from './Profile'
 import Comment from './Comment'
+import Favorite from './Favorite'
 
 export default class Article extends BaseModel {
   @column({ isPrimary: true })
@@ -33,6 +34,13 @@ export default class Article extends BaseModel {
 
   @hasMany(() => Comment)
   public comments: HasMany<typeof Comment>
+
+  @hasMany(() => Favorite)
+  public favorites: HasMany<typeof Favorite>
+
+  public async favoritedBy(this: Article, profile: Profile): Promise<boolean> {
+    return (await this.related('favorites').query().where('profileId', profile.id).first()) !== null
+  }
 
   @column()
   public body: string

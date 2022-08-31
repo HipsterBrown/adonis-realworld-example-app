@@ -8,6 +8,10 @@ TODO:
 - [X] add tags table, relationship w/ articles
 - [X] add profile show view with user articles, favorited articles
 - [X] add comments to articles
-- [ ] add favorites to articles
-- [ ] add filters to article index (home) view: following, tags
+- [X] add favorites to articles
 - [ ] add profile following
+- [ ] add filters to article index (home) view: following, tags
+- [ ] ensure all empty states are covered
+- [ ] abstract view components & common partials
+- [ ] create realistic seeds
+- [ ] basic E2E test coverage

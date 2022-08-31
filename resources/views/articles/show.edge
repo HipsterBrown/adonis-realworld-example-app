@@ -36,11 +36,21 @@
                       Follow {{ article.user.profile.name }} <span class="counter">(10)</span>
                   </button>
                   &nbsp;&nbsp;
-                  <button class="btn btn-sm btn-outline-primary">
-                      <i class="ion-heart"></i>
-                      &nbsp;
-                      Favorite Post <span class="counter">(29)</span>
-                  </button>
+                  @if(auth.isLoggedIn && await article.favoritedBy(await auth.user.related('profile').query().firstOrFail()))
+                    <form method="POST" action="{{ route('favorites.destroy', article, { qs: { _method: 'DELETE' } }) }}" style="display:inline">
+                        <button type="submit" class="btn btn-primary btn-sm pull-xs-right">
+                            <i class="ion-heart"></i> Unfavorite post {{ article.$extras.favorites_count }}
+                        </button>
+                    </form>
+                  @else
+                    <form method="POST" action="{{ route('favorites.create', article) }}" style="display:inline">
+                        <button class="btn btn-sm btn-outline-primary">
+                            <i class="ion-heart"></i>
+                            &nbsp;
+                            Favorite Post <span class="counter">({{ article.$extras.favorites_count }})</span>
+                        </button>
+                    </form>
+                  @endif
                 @end
               </div>
 
@@ -86,11 +96,21 @@
                       Follow {{ article.user.profile.name }} <span class="counter">(10)</span>
                   </button>
                   &nbsp;&nbsp;
-                  <button class="btn btn-sm btn-outline-primary">
-                      <i class="ion-heart"></i>
-                      &nbsp;
-                      Favorite Post <span class="counter">(29)</span>
-                  </button>
+                  @if(auth.isLoggedIn && await article.favoritedBy(await auth.user.related('profile').query().firstOrFail()))
+                    <form method="POST" action="{{ route('favorites.destroy', article, { qs: { _method: 'DELETE' } }) }}" style="display:inline">
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            <i class="ion-heart"></i> Unfavorite Post ({{ article.$extras.favorites_count }})
+                        </button>
+                    </form>
+                  @else
+                    <form method="POST" action="{{ route('favorites.create', article) }}" style="display:inline">
+                        <button class="btn btn-sm btn-outline-primary">
+                            <i class="ion-heart"></i>
+                            &nbsp;
+                            Favorite Post <span class="counter">({{ article.$extras.favorites_count }})</span>
+                        </button>
+                    </form>
+                  @endif
                 @end
               </div>
           </div>

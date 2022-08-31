@@ -48,7 +48,7 @@
                                 <span class="date">{{ article.createdAt }}</span>
                             </div>
                             <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                                <i class="ion-heart"></i> 29
+                              <i class="ion-heart"></i> {{ article.$extras.favorites_count }}
                             </button>
                         </div>
                         <a href="{{ route('articles.show', article) }}" class="preview-link">

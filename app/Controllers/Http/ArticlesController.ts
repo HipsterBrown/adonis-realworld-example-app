@@ -11,6 +11,7 @@ export default class ArticlesController {
         query.whereHas('tags', (tagsQuery) => tagsQuery.where('value', tag))
       )
       .preload('user', (userQuery) => userQuery.preload('profile'))
+      .withCount('favorites')
     const tags = await Tag.all()
     return view.render('articles/index', { articles, tags })
   }
@@ -36,10 +37,14 @@ export default class ArticlesController {
 
   public async show({ request, view }: HttpContextContract) {
     const article = await Article.findByOrFail('slug', request.param('slug'))
-    await article.load('user', (loader) => loader.preload('profile'))
-    await article.load('comments', (loader) =>
-      loader.preload('author').orderBy('createdAt', 'desc')
-    )
+    await article.load((loader) => {
+      loader
+        .load('user', (userLoader) => userLoader.preload('profile'))
+        .load('comments', (commentLoader) =>
+          commentLoader.preload('author').orderBy('createdAt', 'desc')
+        )
+    })
+    await article.loadCount('favorites')
 
     return view.render('articles/show', { article })
   }

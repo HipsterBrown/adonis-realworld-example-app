@@ -9,6 +9,7 @@ import {
 } from '@ioc:Adonis/Lucid/Orm'
 import User from './User'
 import Article from './Article'
+import Favorite from './Favorite'
 
 export default class Profile extends BaseModel {
   @column({ isPrimary: true })
@@ -36,6 +37,9 @@ export default class Profile extends BaseModel {
     throughLocalKey: 'id',
   })
   public articles: HasManyThrough<typeof Article>
+
+  @hasManyThrough([() => Article, () => Favorite])
+  public favoriteArticles: HasManyThrough<typeof Article>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

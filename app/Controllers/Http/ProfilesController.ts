@@ -9,11 +9,24 @@ export default class ProfilesController {
 
   public async store({}: HttpContextContract) {}
 
-  public async show({ view, params }: HttpContextContract) {
+  public async show({ view, params, request }: HttpContextContract) {
     const profile = await Profile.findByOrFail('name', params.name)
-    await profile.load((loader) =>
-      loader.load('user').load('articles', (articleLoader) => articleLoader.preload('profile'))
-    )
+    await profile.load((loader) => {
+      loader.load('user')
+
+      if (request.url().includes('favorites')) {
+        loader.load('articles', (articleLoader) =>
+          articleLoader
+            .whereHas('favorites', (query) => query.where('profileId', profile.id))
+            .preload('profile')
+            .withCount('favorites')
+        )
+      } else {
+        loader.load('articles', (articleLoader) =>
+          articleLoader.preload('profile').withCount('favorites')
+        )
+      }
+    })
     const { articles } = profile
 
     return view.render('profiles/show', { profile, articles })

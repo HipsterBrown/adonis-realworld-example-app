@@ -50,4 +50,7 @@ Route.group(() => {
   Route.get('/articles/:slug/comments/:id', 'CommentsController.edit').as('comments.edit')
   Route.patch('/articles/:slug/comments/:id', 'CommentsController.update').as('comments.update')
   Route.delete('/articles/:slug/comments/:id', 'CommentsController.destroy').as('comments.destroy')
+
+  Route.post('/articles/:slug/favorites', 'FavoritesController.create').as('favorites.create')
+  Route.delete('/articles/:slug/favorites', 'FavoritesController.destroy').as('favorites.destroy')
 }).middleware('auth')
