@@ -12,11 +12,23 @@
                       <h4>{{ profile.name }}</h4>
                       <p>{{ profile.bio }}</p>
                       @if(profile.user.id !== auth.user?.id)
-                        <button class="btn btn-sm btn-outline-secondary action-btn">
-                            <i class="ion-plus-round"></i>
-                            &nbsp;
-                            Follow {{ profile.name }}
-                        </button>
+                        @if(auth.isLoggedIn && await profile.followedBy(await auth.user.related('profile').query().firstOrFail()))
+                          <form method="POST" action="{{ route('profile.unfollow', profile, { qs: {_method: 'DELETE'} }) }}">
+                            <button type="submit" class="btn btn-sm btn-secondary action-btn">
+                                <i class="ion-minus-round"></i>
+                                &nbsp;
+                                Unfollow {{ profile.name }}
+                            </button>
+                          </form>
+                        @else
+                          <form method="POST" action="{{ route('profile.follow', profile) }}">
+                            <button type="submit" class="btn btn-sm btn-outline-secondary action-btn">
+                                <i class="ion-plus-round"></i>
+                                &nbsp;
+                                Follow {{ profile.name }}
+                            </button>
+                          </form>
+                        @endif
                       @endif
                   </div>
 

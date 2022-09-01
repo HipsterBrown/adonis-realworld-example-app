@@ -10,6 +10,7 @@ import {
 import User from './User'
 import Article from './Article'
 import Favorite from './Favorite'
+import Follow from './Follow'
 
 export default class Profile extends BaseModel {
   @column({ isPrimary: true })
@@ -40,6 +41,30 @@ export default class Profile extends BaseModel {
 
   @hasManyThrough([() => Article, () => Favorite])
   public favoriteArticles: HasManyThrough<typeof Article>
+
+  @hasManyThrough([() => Profile, () => Follow], {
+    foreignKey: 'followingId',
+    localKey: 'id',
+    throughForeignKey: 'id',
+    throughLocalKey: 'followerId',
+  })
+  public followers: HasManyThrough<typeof Profile>
+
+  @hasManyThrough([() => Profile, () => Follow], {
+    foreignKey: 'followerId',
+    localKey: 'id',
+    throughForeignKey: 'id',
+    throughLocalKey: 'followingId',
+  })
+  public followings: HasManyThrough<typeof Profile>
+
+  public async followedBy(this: Profile, profile: Profile): Promise<boolean> {
+    const follower = await this.related('followers')
+      .query()
+      .where('profiles.id', profile.id)
+      .first()
+    return follower !== null
+  }
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

@@ -53,4 +53,7 @@ Route.group(() => {
 
   Route.post('/articles/:slug/favorites', 'FavoritesController.create').as('favorites.create')
   Route.delete('/articles/:slug/favorites', 'FavoritesController.destroy').as('favorites.destroy')
+
+  Route.post('/profiles/:name/follow', 'FollowsController.create').as('profile.follow')
+  Route.delete('/profiles/:name/follow', 'FollowsController.destroy').as('profile.unfollow')
 }).middleware('auth')

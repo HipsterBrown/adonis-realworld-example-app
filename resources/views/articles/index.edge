@@ -15,12 +15,17 @@
                       <ul class="nav nav-pills outline-active">
                           @if(auth.isLoggedIn)
                             <li class="nav-item">
-                              <a class="nav-link disabled" href="{{ route('articles.index', { qs: { filterBy: 'following', followedBy: auth.user?.id }}) }}">Your Feed</a>
+                              <a class="nav-link {{ followFeed ? 'active' : '' }}" href="{{ route('articles.index', { qs: { filterBy: 'following' }}) }}">Your Feed</a>
                             </li>
                           @endif
                           <li class="nav-item">
-                            <a class="nav-link active" href="{{ route('articles.index') }}">Global Feed</a>
+                            <a class="nav-link {{ !selectedTag && !followFeed ? 'active' : ''}}" href="{{ route('articles.index') }}">Global Feed</a>
                           </li>
+                          @if(selectedTag)
+                            <li class="nav-item">
+                              <span class="nav-link {{ selectedTag ? 'active' : ''}}">#{{ selectedTag }}</span>
+                            </li>
+                          @endif
                       </ul>
                   </div>
 

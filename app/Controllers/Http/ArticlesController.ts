@@ -1,19 +1,34 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Article from '../../Models/Article'
+import Follow from '../../Models/Follow'
+import Profile from '../../Models/Profile'
 import Tag from '../../Models/Tag'
 import CreateArticleValidator from '../../Validators/CreateArticleValidator'
 
 export default class ArticlesController {
-  public async index({ view, request }: HttpContextContract) {
+  public async index({ view, request, auth }: HttpContextContract) {
     const { filterBy, tag } = request.qs()
+    const currentProfile = await Profile.findBy('user_id', auth.user?.id)
+
     const articles = await Article.query()
       .if(filterBy === 'tag' && !!tag, (query) =>
         query.whereHas('tags', (tagsQuery) => tagsQuery.where('value', tag))
       )
+      .if(filterBy === 'following' && currentProfile, (query) =>
+        query.whereHas('profile', async (profileQuery) => {
+          const following = Follow.query().where('followerId', currentProfile!.id)
+          profileQuery.whereIn('id', following.select('followingId'))
+        })
+      )
       .preload('user', (userQuery) => userQuery.preload('profile'))
       .withCount('favorites')
     const tags = await Tag.all()
-    return view.render('articles/index', { articles, tags })
+    return view.render('articles/index', {
+      articles,
+      tags,
+      selectedTag: tag,
+      followFeed: filterBy === 'following',
+    })
   }
 
   public async new({ view }: HttpContextContract) {
@@ -39,7 +54,9 @@ export default class ArticlesController {
     const article = await Article.findByOrFail('slug', request.param('slug'))
     await article.load((loader) => {
       loader
-        .load('user', (userLoader) => userLoader.preload('profile'))
+        .load('user', (userLoader) =>
+          userLoader.preload('profile', (profileLoader) => profileLoader.withCount('followers'))
+        )
         .load('comments', (commentLoader) =>
           commentLoader.preload('author').orderBy('createdAt', 'desc')
         )

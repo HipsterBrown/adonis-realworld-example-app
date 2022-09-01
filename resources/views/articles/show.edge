@@ -30,11 +30,23 @@
                     </button>
                   </form>
                 @else
-                  <button class="btn btn-sm btn-outline-secondary">
-                      <i class="ion-plus-round"></i>
-                      &nbsp;
-                      Follow {{ article.user.profile.name }} <span class="counter">(10)</span>
-                  </button>
+                  @if(auth.isLoggedIn && await article.user.profile.followedBy(await auth.user.related('profile').query().firstOrFail()))
+                    <form method="POST" action="{{ route('profile.unfollow', article.user.profile, { qs: {_method: 'DELETE'} }) }}" style="display:inline">
+                      <button type="submit" class="btn btn-sm btn-secondary action-btn">
+                          <i class="ion-minus-round"></i>
+                          &nbsp;
+                          Unfollow {{ article.user.profile.name }} <span class="counter">({{ article.user.profile.$extras.followers_count }})</span>
+                      </button>
+                    </form>
+                  @else
+                    <form method="POST" action="{{ route('profile.follow', article.user.profile) }}" style="display:inline">
+                      <button type="submit" class="btn btn-sm btn-outline-secondary action-btn">
+                          <i class="ion-plus-round"></i>
+                          &nbsp;
+                          Follow {{ article.user.profile.name }} <span class="counter">({{ article.user.profile.$extras.followers_count }})</span>
+                      </button>
+                    </form>
+                  @endif
                   &nbsp;&nbsp;
                   @if(auth.isLoggedIn && await article.favoritedBy(await auth.user.related('profile').query().firstOrFail()))
                     <form method="POST" action="{{ route('favorites.destroy', article, { qs: { _method: 'DELETE' } }) }}" style="display:inline">
@@ -90,11 +102,23 @@
                     </button>
                   </form>
                 @else
-                  <button class="btn btn-sm btn-outline-secondary">
-                      <i class="ion-plus-round"></i>
-                      &nbsp;
-                      Follow {{ article.user.profile.name }} <span class="counter">(10)</span>
-                  </button>
+                  @if(auth.isLoggedIn && await article.user.profile.followedBy(await auth.user.related('profile').query().firstOrFail()))
+                    <form method="POST" action="{{ route('profile.unfollow', article.user.profile, { qs: {_method: 'DELETE'} }) }}" style="display:inline">
+                      <button type="submit" class="btn btn-sm btn-secondary action-btn">
+                          <i class="ion-minus-round"></i>
+                          &nbsp;
+                          Unfollow {{ article.user.profile.name }} <span class="counter">({{ article.user.profile.$extras.followers_count }})</span>
+                      </button>
+                    </form>
+                  @else
+                    <form method="POST" action="{{ route('profile.follow', article.user.profile) }}" style="display:inline">
+                      <button type="submit" class="btn btn-sm btn-outline-secondary action-btn">
+                          <i class="ion-plus-round"></i>
+                          &nbsp;
+                          Follow {{ article.user.profile.name }} <span class="counter">({{ article.user.profile.$extras.followers_count }})</span>
+                      </button>
+                    </form>
+                  @endif
                   &nbsp;&nbsp;
                   @if(auth.isLoggedIn && await article.favoritedBy(await auth.user.related('profile').query().firstOrFail()))
                     <form method="POST" action="{{ route('favorites.destroy', article, { qs: { _method: 'DELETE' } }) }}" style="display:inline">

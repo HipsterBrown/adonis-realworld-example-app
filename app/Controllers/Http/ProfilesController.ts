@@ -3,14 +3,8 @@ import Profile from '../../Models/Profile'
 import UpdateProfileValidator from '../../Validators/UpdateProfileValidator'
 
 export default class ProfilesController {
-  public async index({}: HttpContextContract) {}
-
-  public async create({}: HttpContextContract) {}
-
-  public async store({}: HttpContextContract) {}
-
   public async show({ view, params, request }: HttpContextContract) {
-    const profile = await Profile.findByOrFail('name', params.name)
+    const profile = await Profile.findByOrFail('name', decodeURIComponent(params.name))
     await profile.load((loader) => {
       loader.load('user')
 
@@ -53,6 +47,4 @@ export default class ProfilesController {
 
     return response.redirect().toRoute('settings')
   }
-
-  public async destroy({}: HttpContextContract) {}
 }
