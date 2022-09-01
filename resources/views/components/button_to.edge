@@ -1,0 +1,5 @@
+<form method="POST" action="{{ path }}?_method={{ method || 'POST' }}" style="display:inline">
+  <button type="submit" {{ $props.serializeOnly(['class', 'aria-label']) }}>
+    {{{ await $slots.main() }}}
+  </button>
+</form>

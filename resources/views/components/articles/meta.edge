@@ -1,0 +1,27 @@
+<div class="article-meta">
+  <a href="{{ route('profiles.show', article.user.profile ) }}"><img src="{{ article.user.profile.avatar }}"/></a>
+
+  <div class="info">
+    <a href="{{ route('profiles.show', article.user.profile )}}" class="author">{{ article.user.profile.name }}</a>
+    <span class="date">{{ article.createdAt }}</span>
+  </div>
+
+  @if(article.user.id === auth.user?.id)
+    <a href="{{ route('articles.edit', article) }}" class="btn btn-sm btn-outline-secondary">
+      <i class="ion-edit"></i>
+      &nbsp;
+      Edit Article
+    </a>
+    &nbsp;&nbsp;
+    @buttonTo({ path: route('articles.destroy', article), class: "btn btn-sm btn-outline-danger", method: "DELETE" })
+      <i class="ion-trash-a"></i>
+      &nbsp;
+      Delete Article
+    @end
+  @else
+    @!profiles.follow({ profile: article.user.profile })
+    &nbsp;&nbsp;
+    @!articles.favorite({ article })
+  @end
+</div>
+

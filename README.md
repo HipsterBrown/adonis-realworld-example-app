@@ -11,7 +11,8 @@ TODO:
 - [X] add favorites to articles
 - [X] add profile following
 - [X] add filters to article index (home) view: following, tags
-- [ ] ensure all empty states are covered
-- [ ] abstract view components & common partials
+- [X] ensure all empty states are covered
+- [X] add article pagination
+- [X] abstract view components & common partials
 - [ ] create realistic seeds
 - [ ] basic E2E test coverage

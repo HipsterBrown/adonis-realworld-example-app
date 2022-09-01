@@ -1,29 +1,29 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Article from '../../Models/Article'
 import Profile from '../../Models/Profile'
 import UpdateProfileValidator from '../../Validators/UpdateProfileValidator'
 
 export default class ProfilesController {
   public async show({ view, params, request }: HttpContextContract) {
     const profile = await Profile.findByOrFail('name', decodeURIComponent(params.name))
-    await profile.load((loader) => {
-      loader.load('user')
+    const showFavorites = request.matchesRoute('profiles.show.favorites')
+    let articles: Article[]
 
-      if (request.url().includes('favorites')) {
-        loader.load('articles', (articleLoader) =>
-          articleLoader
-            .whereHas('favorites', (query) => query.where('profileId', profile.id))
-            .preload('profile')
-            .withCount('favorites')
-        )
-      } else {
-        loader.load('articles', (articleLoader) =>
-          articleLoader.preload('profile').withCount('favorites')
-        )
-      }
-    })
-    const { articles } = profile
+    if (showFavorites) {
+      articles = await Article.query()
+        .whereHas('favorites', (query) => query.where('profileId', profile.id))
+        .preload('profile')
+        .withCount('favorites')
+    } else {
+      await profile.load('articles', (articleLoader) => {
+        articleLoader.preload('profile').withCount('favorites')
+      })
+      articles = profile.articles
+    }
 
-    return view.render('profiles/show', { profile, articles })
+    await profile.loadCount('followers')
+
+    return view.render('profiles/show', { profile, articles, showFavorites })
   }
 
   public async edit({ auth, view }: HttpContextContract) {

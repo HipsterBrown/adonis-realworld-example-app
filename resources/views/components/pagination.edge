@@ -1,0 +1,13 @@
+@if(collection.length > 0)
+  <nav>
+    <ul class="pagination">
+      @each(anchor in collection.getUrlsForRange(collection.firstPage, collection.lastPage))
+        <li class="page-item {{ anchor.isActive ? 'active': '' }}">
+          <a href="{{ anchor.url }}">
+            {{ anchor.page }}
+          </a>
+        </li>
+      @end
+    </ul>
+  </nav>
+@endif

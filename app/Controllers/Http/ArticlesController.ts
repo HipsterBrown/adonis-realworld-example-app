@@ -8,7 +8,9 @@ import CreateArticleValidator from '../../Validators/CreateArticleValidator'
 export default class ArticlesController {
   public async index({ view, request, auth }: HttpContextContract) {
     const { filterBy, tag } = request.qs()
-    const currentProfile = await Profile.findBy('user_id', auth.user?.id)
+    const page = request.input('page', 1)
+    const limit = 10
+    const currentProfile = await Profile.findBy('user_id', auth.user?.id ?? '')
 
     const articles = await Article.query()
       .if(filterBy === 'tag' && !!tag, (query) =>
@@ -20,9 +22,14 @@ export default class ArticlesController {
           profileQuery.whereIn('id', following.select('followingId'))
         })
       )
-      .preload('user', (userQuery) => userQuery.preload('profile'))
+      .preload('profile')
       .withCount('favorites')
+      .paginate(page, limit)
     const tags = await Tag.all()
+
+    if (filterBy) articles.queryString({ filterBy })
+    if (tag) articles.queryString({ filterBy, tag })
+
     return view.render('articles/index', {
       articles,
       tags,

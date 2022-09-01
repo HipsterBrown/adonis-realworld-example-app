@@ -2,76 +2,54 @@
 
 @section('body')
   <div class="home-page">
-      <div class="banner">
-          <div class="container">
-              <h1 class="logo-font">conduit</h1>
-              <p>A place to share your knowledge.</p>
-          </div>
+    <div class="banner">
+      <div class="container">
+        <h1 class="logo-font">conduit</h1>
+        <p>A place to share your knowledge.</p>
       </div>
-      <div class="container page">
-          <div class="row">
-              <div class="col-md-9">
-                  <div class="feed-toggle">
-                      <ul class="nav nav-pills outline-active">
-                          @if(auth.isLoggedIn)
-                            <li class="nav-item">
-                              <a class="nav-link {{ followFeed ? 'active' : '' }}" href="{{ route('articles.index', { qs: { filterBy: 'following' }}) }}">Your Feed</a>
-                            </li>
-                          @endif
-                          <li class="nav-item">
-                            <a class="nav-link {{ !selectedTag && !followFeed ? 'active' : ''}}" href="{{ route('articles.index') }}">Global Feed</a>
-                          </li>
-                          @if(selectedTag)
-                            <li class="nav-item">
-                              <span class="nav-link {{ selectedTag ? 'active' : ''}}">#{{ selectedTag }}</span>
-                            </li>
-                          @endif
-                      </ul>
-                  </div>
+    </div>
+    <div class="container page">
+      <div class="row">
+        <div class="col-md-9">
+          <div class="feed-toggle">
+            <ul class="nav nav-pills outline-active">
+              @if(auth.isLoggedIn)
+                <li class="nav-item">
+                  <a class="nav-link {{ followFeed ? 'active' : '' }}" href="{{ route('articles.index', {}, { qs: { filterBy: 'following' }}) }}">Your Feed</a>
+                </li>
+              @endif
 
-                  @each(article in articles)
-                    <div class="article-preview">
-                        <div class="article-meta">
-                            <a href="{{ route('profiles.show', article.user.profile ) }}"><img src="{{ article.user.profile.avatar }}"/></a>
-                            <div class="info">
-                                <a href="{{ route('profiles.show', article.user.profile )}}" class="author">{{ article.user.profile.name }}</a>
-                                <span class="date">{{ article.createdAt }}</span>
-                            </div>
-                            @if(auth.isLoggedIn && await article.favoritedBy(await auth.user.related('profile').query().firstOrFail()))
-                              <form method="POST" action="{{ route('favorites.destroy', article, { qs: { _method: 'DELETE' } }) }}" style="display:inline">
-                                  <button type="submit" class="btn btn-primary btn-sm pull-xs-right">
-                                      <i class="ion-heart"></i> {{ article.$extras.favorites_count }}
-                                  </button>
-                              </form>
-                            @else
-                              <form method="POST" action="{{ route('favorites.create', article) }}" style="display:inline">
-                                  <button type="submit" class="btn btn-outline-primary btn-sm pull-xs-right">
-                                      <i class="ion-heart"></i> {{ article.$extras.favorites_count }}
-                                  </button>
-                              </form>
-                            @endif
-                        </div>
-                        <a href="{{ route('articles.show', article) }}" class="preview-link">
-                            <h1>{{ article.title }}</h1>
-                            <p>{{ article.description }}</p>
-                            <span>Read more...</span>
-                        </a>
-                    </div>
-                  @end
-              </div>
+              <li class="nav-item">
+                <a class="nav-link {{ !selectedTag && !followFeed ? 'active' : ''}}" href="{{ route('articles.index') }}">Global Feed</a>
+              </li>
 
-              <div class="col-md-3">
-                  <div class="sidebar">
-                      <p>Popular Tags</p>
-
-                      <div class="tag-list">
-                        @each(tag in tags)
-                          <a href="{{ route('articles.index', { qs: { filterBy: 'tag', tag: tag.value } }) }}" class="tag-pill tag-default">{{ tag.value }}</a>
-                        @end
-                      </div>
-                  </div>
-              </div>
+              @if(selectedTag)
+                <li class="nav-item">
+                  <span class="nav-link {{ selectedTag ? 'active' : ''}}">#{{ selectedTag }}</span>
+                </li>
+              @endif
+            </ul>
           </div>
+
+          @!articles.list({ articles })
+
+          @!pagination({ collection: articles })
+        </div>
+
+        <div class="col-md-3">
+          <div class="sidebar">
+            <p>Popular Tags</p>
+
+            <div class="tag-list">
+              @each(tag in tags)
+                <a aria-label="view articles tagged as {{ tag.value }}" href="{{ route('articles.index', {}, { qs: { filterBy: 'tag', tag: tag.value } }) }}" class="tag-pill tag-default">
+                  {{ tag.value }}
+                </a>
+              @end
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
   </div>
 @end

@@ -1,0 +1,26 @@
+@if(auth.isLoggedIn && await article.favoritedBy(await auth.user.related('profile').query().firstOrFail()))
+  @buttonTo({ 
+    class: `btn btn-primary btn-sm ${ variant === 'minimal' ? 'pull-xs-right' : '' }`,
+    path: route('favorites.destroy', article),
+    method: 'DELETE'
+  })
+    <i class="ion-heart"></i>
+    @if(variant === 'minimal')
+      {{ article.$extras.favorites_count }}
+    @else
+      Unfavorite post ({{ article.$extras.favorites_count }})
+    @endif
+  @end
+@else
+  @buttonTo({ 
+    class: `btn btn-outline-primary btn-sm ${ variant === 'minimal' ? 'pull-xs-right' : '' }`,
+    path: route('favorites.create', article)
+  })
+    <i class="ion-heart"></i>
+    @if(variant === 'minimal')
+      {{ article.$extras.favorites_count }}
+    @else
+      Favorite post ({{ article.$extras.favorites_count }})
+    @endif
+  @end
+@endif

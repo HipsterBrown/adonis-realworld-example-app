@@ -1,0 +1,13 @@
+@if(auth.isLoggedIn && await profile.followedBy(await auth.user.related('profile').query().firstOrFail()))
+  @buttonTo({ path: route("profile.unfollow", profile), class: "btn btn-sm btn-secondary action-btn", method: "DELETE" })
+    <i class="ion-minus-round"></i>
+    &nbsp;
+    Unfollow {{ profile.name }} <span class="counter">({{ profile.$extras.followers_count }})</span>
+  @end
+@else
+  @buttonTo({ path: route("profile.follow", profile), class: "btn btn-sm btn-outline-secondary action-btn" })
+    <i class="ion-plus-round"></i>
+    &nbsp;
+    Follow {{ profile.name }} <span class="counter">({{ profile.$extras.followers_count }})</span>
+  @end
+@endif

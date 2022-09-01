@@ -42,9 +42,9 @@
 
                   <hr />
 
-                  <form action="{{ route('sessions.destroy', { qs: { _method: 'DELETE' }}) }}" method="POST">
-                    <button class="btn btn-outline-danger" type="submit">Or click here to logout.</button>
-                  </form>
+                  @buttonTo({ path: route('sessions.destroy'), class: "btn btn-outline-danger", method: "DELETE" })
+                    Or click here to logout.
+                  @end
               </div>
 
           </div>

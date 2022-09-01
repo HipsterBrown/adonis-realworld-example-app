@@ -1,0 +1,25 @@
+@if(articles.length === 0)
+  <div class="article-preview">
+    <p>No articles here...yet.</p>
+  </div>
+@else
+  @each(article in articles)
+    <div class="article-preview">
+      <div class="article-meta">
+        <a href="{{ route('profiles.show', article.profile ) }}" aria-label="{{article.profile.name}}">
+          <img role="presentation" src="{{ article.profile.avatar }}"/>
+        </a>
+        <div class="info">
+          <a href="{{ route('profiles.show', article.profile )}}" class="author">{{ article.profile.name }}</a>
+          <span class="date">{{ article.createdAt }}</span>
+        </div>
+        @!articles.favorite({ article, variant: 'minimal' })
+      </div>
+      <a href="{{ route('articles.show', article) }}" class="preview-link">
+        <h1>{{ article.title }}</h1>
+        <p>{{ article.description }}</p>
+        <span>Read more...</span>
+      </a>
+    </div>
+  @end
+@endif

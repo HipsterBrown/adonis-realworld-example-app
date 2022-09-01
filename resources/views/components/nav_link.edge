@@ -1,0 +1,3 @@
+<a class="nav-link {{ request.url() === path ? 'active' : ''}}" href="{{ path }}">
+  {{ safe(await $slots.main()) }}
+</a>
