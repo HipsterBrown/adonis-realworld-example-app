@@ -14,9 +14,10 @@ export default class ProfilesController {
         .whereHas('favorites', (query) => query.where('profileId', profile.id))
         .preload('profile')
         .withCount('favorites')
+        .orderBy('createdAt', 'desc')
     } else {
       await profile.load('articles', (articleLoader) => {
-        articleLoader.preload('profile').withCount('favorites')
+        articleLoader.preload('profile').withCount('favorites').orderBy('createdAt', 'desc')
       })
       articles = profile.articles
     }

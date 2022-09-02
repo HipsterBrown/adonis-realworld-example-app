@@ -53,8 +53,8 @@
                 </a>
                 &nbsp;
                 <a href="{{ route('profiles.show', comment.author) }}" class="comment-author">{{ comment.author.name }}</a>
-                <span class="date-posted">{{ comment.createdAt }}</span>
-                @if(auth.isLoggedIn && auth.user.id === article.userId)
+                <span class="date-posted" title="{{comment.createdAt}}">{{ formatDate(comment.createdAt) }}</span>
+                @if(auth.isLoggedIn && auth.user.id === comment.author.userId)
                   <span class="mod-options">
                     <a href="{{ route('comments.edit', { slug: article.slug, id: comment.id }) }}" aria-label="Edit your comment"><i class="ion-edit"></i></a>
                     @buttonTo({ 

@@ -3,7 +3,7 @@
 
   <div class="info">
     <a href="{{ route('profiles.show', article.user.profile )}}" class="author">{{ article.user.profile.name }}</a>
-    <span class="date">{{ article.createdAt }}</span>
+    <span class="date" title="{{article.createdAt}}">{{ formatDate(article.createdAt) }}</span>
   </div>
 
   @if(article.user.id === auth.user?.id)

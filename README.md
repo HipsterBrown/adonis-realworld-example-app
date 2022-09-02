@@ -14,5 +14,6 @@ TODO:
 - [X] ensure all empty states are covered
 - [X] add article pagination
 - [X] abstract view components & common partials
-- [ ] create realistic seeds
+- [X] add date format helper
+- [X] create realistic seeds
 - [ ] basic E2E test coverage

@@ -24,6 +24,7 @@ export default class ArticlesController {
       )
       .preload('profile')
       .withCount('favorites')
+      .orderBy('createdAt', 'desc')
       .paginate(page, limit)
     const tags = await Tag.all()
 

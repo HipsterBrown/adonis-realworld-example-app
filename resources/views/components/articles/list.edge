@@ -11,7 +11,7 @@
         </a>
         <div class="info">
           <a href="{{ route('profiles.show', article.profile )}}" class="author">{{ article.profile.name }}</a>
-          <span class="date">{{ article.createdAt }}</span>
+          <span class="date" title="{{ article.createdAt }}">{{ formatDate(article.createdAt) }}</span>
         </div>
         @!articles.favorite({ article, variant: 'minimal' })
       </div>
