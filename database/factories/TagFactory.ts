@@ -1,8 +1,11 @@
-import tag from 'App/Models/tag'
+import Tag from '../../app/Models/Tag'
 import Factory from '@ioc:Adonis/Lucid/Factory'
+import { ArticleFactory } from './ArticleFactory'
 
-export default Factory.define(tag, ({ faker }) => {
+export default Factory.define(Tag, ({ faker }) => {
   return {
-    //
+    value: faker.random.word(),
   }
-}).build()
+})
+  .relation('articles', () => ArticleFactory)
+  .build()
