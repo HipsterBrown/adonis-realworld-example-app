@@ -48,6 +48,13 @@
           "tests/functional/**/*.spec(.ts|.js)"
         ],
         "timeout": 60000
+      },
+      {
+        "name": "e2e",
+        "files": [
+          "tests/e2e/**/*.spec.ts"
+        ],
+        "timeout": 100000
       }
     ]
   },

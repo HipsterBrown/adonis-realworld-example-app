@@ -6,6 +6,7 @@
     "dev": "node ace serve --watch",
     "build": "node ace build --production",
     "start": "node server.js",
+    "start:ci": "node ace serve",
     "lint": "eslint . --ext=.ts",
     "format": "prettier --write ."
   },
@@ -50,6 +51,8 @@
     "eslint-plugin-adonis": "^2.1.0",
     "eslint-plugin-prettier": "^4.2.1",
     "pino-pretty": "^9.1.0",
+    "playwright": "^1.25.1",
+    "playwright-testing-library": "^4.3.1",
     "prettier": "^2.7.1",
     "typescript": "~4.8.2",
     "youch": "^3.2.0",

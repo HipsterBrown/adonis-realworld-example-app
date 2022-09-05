@@ -5,9 +5,46 @@
  * file.
  */
 
-import type { Config } from '@japa/runner'
+import type { Config, Runner } from '@japa/runner'
 import TestUtils from '@ioc:Adonis/Core/TestUtils'
 import { assert, runFailedTests, specReporter, apiClient } from '@japa/preset-adonis'
+import playwright from 'playwright'
+import type { Browser, Page } from 'playwright'
+
+declare module '@japa/runner' {
+  // Interface must match the class name
+  interface TestContext {
+    browser: Browser
+    page: Page
+  }
+}
+
+type BrowserName = 'firefox' | 'webkit' | 'chromium'
+type PlaywrightClientArgs = {
+  /** defaults to firefox */
+  browser?: BrowserName
+}
+
+function playwrightClient({ browser = 'firefox' }: PlaywrightClientArgs = {}) {
+  return async function (_config: unknown, runner: Runner) {
+    runner.onSuite((suite) => {
+      if (suite.name === 'e2e') {
+        suite.onGroup((group) => {
+          group.each.setup(async (test) => {
+            test.context.browser = await playwright[browser].launch()
+            test.context.page = await test.context.browser.newPage({
+              baseURL: `http://${process.env.HOST}:${process.env.PORT}`,
+            })
+
+            return async () => {
+              await test.context.browser.close()
+            }
+          })
+        })
+      }
+    })
+  }
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +57,12 @@ import { assert, runFailedTests, specReporter, apiClient } from '@japa/preset-ad
 | Feel free to remove existing plugins or add more.
 |
 */
-export const plugins: Config['plugins'] = [assert(), runFailedTests(), apiClient()]
+export const plugins: Config['plugins'] = [
+  assert(),
+  runFailedTests(),
+  apiClient(),
+  playwrightClient(),
+]
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +106,9 @@ export const runnerHooks: Required<Pick<Config, 'setup' | 'teardown'>> = {
 */
 export const configureSuite: Config['configureSuite'] = (suite) => {
   if (suite.name === 'functional') {
+    suite.setup(() => TestUtils.httpServer().start())
+  }
+  if (suite.name === 'e2e') {
     suite.setup(() => TestUtils.httpServer().start())
   }
 }
