@@ -10,7 +10,7 @@ import TestUtils from '@ioc:Adonis/Core/TestUtils'
 import { assert, runFailedTests, specReporter, apiClient } from '@japa/preset-adonis'
 import playwright from 'playwright'
 import type { Browser, Page } from 'playwright'
-import { getDocument, queries } from 'playwright-testing-library'
+import { getDocument, getQueriesForElement, queries } from 'playwright-testing-library'
 
 declare module '@japa/runner' {
   // Interface must match the class name
@@ -18,6 +18,7 @@ declare module '@japa/runner' {
     browser: Browser
     page: Page
     login(email: string, password: string): Promise<void>
+    getScreen(): Promise<ReturnType<typeof getQueriesForElement>>
   }
 
   interface Test {
@@ -62,6 +63,9 @@ function playwrightClient({ browser = 'firefox', suiteName = 'e2e' }: Playwright
               await passwordInput.fill(password)
 
               await (await queries.findByRole(loginDoc, 'button', { name: 'Sign in' })).click()
+            }
+            test.context.getScreen = async () => {
+              return getQueriesForElement(await getDocument(test.context.page))
             }
 
             return async () => {

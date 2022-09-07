@@ -43,7 +43,7 @@
           @endif
 
           @each(comment in article.comments)
-            <div class="card">
+            <article class="card">
               <div class="card-block">
                 <p class="card-text">{{ comment.body }}</p>
               </div>
@@ -68,7 +68,7 @@
                   </span>
                 @endif
               </div>
-            </div>
+            </article>
           @end
         </div>
       </div>
