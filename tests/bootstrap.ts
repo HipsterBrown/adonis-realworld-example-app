@@ -47,8 +47,18 @@ function playwrightClient({ browser = 'firefox', suiteName = 'e2e' }: Playwright
       if (suite.name === suiteName) {
         suite.onGroup((group) => {
           group.each.setup(async (test) => {
+            const headless = (function () {
+              switch (true) {
+                case process.env.HEADLESS === '0':
+                  return false
+                case 'headless' in test.options:
+                  return (test.options as TestOptions).headless
+                default:
+                  return true
+              }
+            })()
             test.context.browser = await playwright[browser].launch({
-              headless: (test.options as TestOptions).headless,
+              headless,
             })
             test.context.page = await test.context.browser.newPage({
               baseURL: `http://${process.env.HOST}:${process.env.PORT}`,

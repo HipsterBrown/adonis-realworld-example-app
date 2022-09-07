@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "node ace serve --watch",
-    "build": "node ace build --production",
+    "dev": "node ace serve --watch --no-assets",
+    "build": "node ace build --production --no-assets",
     "start": "node server.js",
-    "start:ci": "node ace serve",
     "lint": "eslint . --ext=.ts",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "setup": "node ace migration:run && node ace db:seed",
+    "test": "node ace test",
+    "test:e2e": "node ace test e2e"
   },
   "eslintConfig": {
     "extends": [
@@ -42,7 +44,6 @@
     "@faker-js/faker": "^7.5.0",
     "@japa/preset-adonis": "^1.1.0",
     "@japa/runner": "^2.0.9",
-    "@symfony/webpack-encore": "^3.1.0",
     "@types/marked": "^4.0.6",
     "@types/sanitize-html": "^2.6.2",
     "adonis-preset-ts": "^2.1.0",

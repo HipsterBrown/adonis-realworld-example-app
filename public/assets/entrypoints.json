@@ -1,9 +1,3 @@
 {
-  "entrypoints": {
-    "app": {
-      "js": [
-        "/assets/app.js"
-      ]
-    }
-  }
+  "entrypoints": {}
 }
