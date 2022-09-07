@@ -2,7 +2,8 @@
   @buttonTo({ 
     class: `btn btn-primary btn-sm ${ variant === 'minimal' ? 'pull-xs-right' : '' }`,
     path: route('favorites.destroy', article),
-    method: 'DELETE'
+    method: 'DELETE',
+    'aria-label': 'Unfavorite post'
   })
     <i class="ion-heart"></i>
     @if(variant === 'minimal')
@@ -14,7 +15,8 @@
 @else
   @buttonTo({ 
     class: `btn btn-outline-primary btn-sm ${ variant === 'minimal' ? 'pull-xs-right' : '' }`,
-    path: route('favorites.create', article)
+    path: route('favorites.create', article),
+    'aria-label': 'Favorite post'
   })
     <i class="ion-heart"></i>
     @if(variant === 'minimal')

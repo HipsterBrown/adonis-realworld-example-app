@@ -5,17 +5,27 @@
  * file.
  */
 
-import type { Config, Runner } from '@japa/runner'
+import type { Config, PluginFn, TestOptions } from '@japa/runner'
 import TestUtils from '@ioc:Adonis/Core/TestUtils'
 import { assert, runFailedTests, specReporter, apiClient } from '@japa/preset-adonis'
 import playwright from 'playwright'
 import type { Browser, Page } from 'playwright'
+import { getDocument, queries } from 'playwright-testing-library'
 
 declare module '@japa/runner' {
   // Interface must match the class name
   interface TestContext {
     browser: Browser
     page: Page
+    login(email: string, password: string): Promise<void>
+  }
+
+  interface Test {
+    debug(): void
+  }
+
+  interface TestOptions {
+    headless?: boolean
   }
 }
 
@@ -23,18 +33,36 @@ type BrowserName = 'firefox' | 'webkit' | 'chromium'
 type PlaywrightClientArgs = {
   /** defaults to firefox */
   browser?: BrowserName
+  suiteName?: string
 }
 
-function playwrightClient({ browser = 'firefox' }: PlaywrightClientArgs = {}) {
-  return async function (_config: unknown, runner: Runner) {
+function playwrightClient({ browser = 'firefox', suiteName = 'e2e' }: PlaywrightClientArgs = {}) {
+  return async function (_config, runner, { Test }) {
+    Test.macro('debug', function () {
+      ;(this.options as TestOptions).headless = false
+    })
+
     runner.onSuite((suite) => {
-      if (suite.name === 'e2e') {
+      if (suite.name === suiteName) {
         suite.onGroup((group) => {
           group.each.setup(async (test) => {
-            test.context.browser = await playwright[browser].launch()
+            test.context.browser = await playwright[browser].launch({
+              headless: (test.options as TestOptions).headless,
+            })
             test.context.page = await test.context.browser.newPage({
               baseURL: `http://${process.env.HOST}:${process.env.PORT}`,
             })
+            test.context.login = async (email, password) => {
+              await test.context.page.goto(test.context.route('login'))
+              const loginDoc = await getDocument(test.context.page)
+              const emailInput = await queries.getByLabelText(loginDoc, 'email')
+              const passwordInput = await queries.getByLabelText(loginDoc, 'password')
+
+              await emailInput.fill(email)
+              await passwordInput.fill(password)
+
+              await (await queries.findByRole(loginDoc, 'button', { name: 'Sign in' })).click()
+            }
 
             return async () => {
               await test.context.browser.close()
@@ -43,7 +71,7 @@ function playwrightClient({ browser = 'firefox' }: PlaywrightClientArgs = {}) {
         })
       }
     })
-  }
+  } as PluginFn
 }
 
 /*

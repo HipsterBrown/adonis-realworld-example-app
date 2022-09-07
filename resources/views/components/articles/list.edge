@@ -4,7 +4,7 @@
   </div>
 @else
   @each(article in articles)
-    <div class="article-preview">
+    <article class="article-preview">
       <div class="article-meta">
         <a href="{{ route('profiles.show', article.profile ) }}" aria-label="{{article.profile.name}}">
           <img role="presentation" src="{{ article.profile.avatar }}"/>
@@ -20,6 +20,6 @@
         <p>{{ article.description }}</p>
         <span>Read more...</span>
       </a>
-    </div>
+    </article>
   @end
 @endif

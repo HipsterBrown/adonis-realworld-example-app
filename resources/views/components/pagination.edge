@@ -2,8 +2,8 @@
   <nav>
     <ul class="pagination">
       @each(anchor in collection.getUrlsForRange(collection.firstPage, collection.lastPage))
-        <li class="page-item {{ anchor.isActive ? 'active': '' }}">
-          <a href="{{ anchor.url }}">
+        <li class="page-item">
+          <a href="{{ anchor.url }}" class="{{ anchor.isActive ? 'active': '' }}">
             {{ anchor.page }}
           </a>
         </li>
