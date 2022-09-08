@@ -33,7 +33,7 @@ This codebase relies on [Node.js](https://nodejs.org/en/) version 14+ as the run
 ```
 cp .env.example .env
 pnpm install
-pnpm setup
+pnpm db:setup
 pnpm dev
 ```
 
