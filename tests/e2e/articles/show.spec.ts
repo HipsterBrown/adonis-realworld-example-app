@@ -101,7 +101,7 @@ test.group('articles/show', (group) => {
 
     screen = await getScreen()
     assert.notExists(await screen.queryByText('This is a new comment!'))
-  }).debug()
+  })
 
   test('logged in users can favorite articles', async ({
     assert,

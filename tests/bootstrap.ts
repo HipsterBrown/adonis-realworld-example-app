@@ -5,7 +5,7 @@
  * file.
  */
 
-import type { Config, PluginFn, TestOptions } from '@japa/runner'
+import type { Config, PluginFn } from '@japa/runner'
 import TestUtils from '@ioc:Adonis/Core/TestUtils'
 import { assert, runFailedTests, specReporter, apiClient } from '@japa/preset-adonis'
 import playwright from 'playwright'
@@ -15,18 +15,9 @@ import { getDocument, getQueriesForElement, queries } from 'playwright-testing-l
 declare module '@japa/runner' {
   // Interface must match the class name
   interface TestContext {
-    browser: Browser
     page: Page
     login(email: string, password: string): Promise<void>
     getScreen(): Promise<ReturnType<typeof getQueriesForElement>>
-  }
-
-  interface Test {
-    debug(): void
-  }
-
-  interface TestOptions {
-    headless?: boolean
   }
 }
 
@@ -37,30 +28,21 @@ type PlaywrightClientArgs = {
   suiteName?: string
 }
 
-function playwrightClient({ browser = 'firefox', suiteName = 'e2e' }: PlaywrightClientArgs = {}) {
-  return async function (_config, runner, { Test }) {
-    Test.macro('debug', function () {
-      ;(this.options as TestOptions).headless = false
-    })
-
+function playwrightClient({
+  browser: browserName = 'firefox',
+  suiteName = 'e2e',
+}: PlaywrightClientArgs = {}) {
+  return async function (_config, runner) {
     runner.onSuite((suite) => {
       if (suite.name === suiteName) {
+        let browser: Browser
+        suite.setup(async () => {
+          browser = await playwright[browserName].launch({ headless: process.env.HEADLESS !== '0' })
+          return () => browser.close()
+        })
         suite.onGroup((group) => {
           group.each.setup(async (test) => {
-            const headless = (function () {
-              switch (true) {
-                case process.env.HEADLESS === '0':
-                  return false
-                case 'headless' in test.options:
-                  return (test.options as TestOptions).headless
-                default:
-                  return true
-              }
-            })()
-            test.context.browser = await playwright[browser].launch({
-              headless,
-            })
-            test.context.page = await test.context.browser.newPage({
+            test.context.page = await browser.newPage({
               baseURL: `http://${process.env.HOST}:${process.env.PORT}`,
             })
             test.context.login = async (email, password) => {
@@ -79,7 +61,7 @@ function playwrightClient({ browser = 'firefox', suiteName = 'e2e' }: Playwright
             }
 
             return async () => {
-              await test.context.browser.close()
+              await test.context.page.close()
             }
           })
         })
