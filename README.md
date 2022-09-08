@@ -39,5 +39,5 @@ pnpm dev
 
 - `cp .env.example .env`: creates [environment variable for local development](https://docs.adonisjs.com/guides/environment-variables#defining-variables-in-the-development)
 - `pnpm install`: this installs the runtime and development dependencies for the project
-- `pnpm setup`: runs all the pending database migrations and seeds the sqlite database located in the `tmp/` directory
+- `pnpm db:setup`: runs all the pending database migrations and seeds the sqlite database located in the `tmp/` directory
 - `pnpm dev`: starts the application and watches for file changes to trigger restarting it as needed
