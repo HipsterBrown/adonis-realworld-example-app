@@ -10,10 +10,7 @@ test.group('profiles/show', (group) => {
     return () => Database.rollbackGlobalTransaction()
   })
 
-  test('displays profile info with authored and favorited articles', async ({
-    route,
-    visit,
-  }) => {
+  test('displays profile info with authored and favorited articles', async ({ route, visit }) => {
     const profile = await ProfileFactory.merge({
       name: 'TestPerson',
       bio: 'I am a test person',

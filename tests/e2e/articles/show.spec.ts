@@ -88,19 +88,17 @@ test.group('articles/show', (group) => {
 
     await screen.assertExists(screen.getByText('This is a new comment!'))
 
-    const [deleteButton] = await screen.getByRole('button', {
-      name: 'Delete your comment',
-    }).all()
+    const [deleteButton] = await screen
+      .getByRole('button', {
+        name: 'Delete your comment',
+      })
+      .all()
     await deleteButton.click()
 
     await screen.assertNotExists(screen.getByText('This is a new comment!'))
   })
 
-  test('logged in users can favorite articles', async ({
-    browserContext,
-    route,
-    visit,
-  }) => {
+  test('logged in users can favorite articles', async ({ browserContext, route, visit }) => {
     await ProfileFactory.with('user', 1, (user) =>
       user.merge({ email: 'test.person@example.com', password: 'SuperSecret123' })
     ).create()
@@ -119,19 +117,17 @@ test.group('articles/show', (group) => {
 
     screen = await visit(route('articles.show', article))
 
-    const [favButton] = await screen.getByRole('button', {
-      name: 'Favorite post',
-    }).all()
+    const [favButton] = await screen
+      .getByRole('button', {
+        name: 'Favorite post',
+      })
+      .all()
     await favButton.click()
 
     await screen.assertElementsCount(screen.getByRole('button', { name: 'Unfavorite post' }), 2)
   })
 
-  test('logged in users can follow article authors', async ({
-    browserContext,
-    route,
-    visit,
-  }) => {
+  test('logged in users can follow article authors', async ({ browserContext, route, visit }) => {
     await ProfileFactory.with('user', 1, (user) =>
       user.merge({ email: 'test.person@example.com', password: 'SuperSecret123' })
     ).create()
@@ -150,9 +146,11 @@ test.group('articles/show', (group) => {
 
     screen = await visit(route('articles.show', article))
 
-    const [folButton] = await screen.getByRole('button', {
-      name: /Follow/,
-    }).all()
+    const [folButton] = await screen
+      .getByRole('button', {
+        name: /Follow/,
+      })
+      .all()
     await folButton.click()
 
     await screen.assertElementsCount(screen.getByRole('button', { name: /Unfollow/ }), 2)

@@ -10,24 +10,53 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+      - name: Check cache
+        uses: actions/cache@v3
+        id: cache
         with:
-          version: 7.x.x
+          path: ~/.local/share/rtx
+          key: rtx-tools-${{ hashFiles('.tool-versions') }}
+          restore-keys: rtx-tools-
 
-      - name: Setup node
-        uses: actions/setup-node@v2
+      - name: Setup tool versions
+        uses: jdxcode/rtx-action@v1
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
         with:
-          node-version: "16.x"
-          cache: pnpm
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-store-
 
       - name: Install dependencies
         run: pnpm install
 
+      - name: Get installed Playwright version
+        id: playwright-version
+        run: |
+          echo "PLAYWRIGHT_VERSION=$(pnpm list playwright --json | jq '.[0].devDependencies.playwright.version')" >> $GITHUB_OUTPUT
+
+      - name: Cache playwright binaries
+        uses: actions/cache@v3
+        id: playwright-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: playwright-${{ steps.playwright-version.outputs.PLAYWRIGHT_VERSION }}
+          restore-keys: playwright-
+
       - name: Install Playwright Browsers
         run: pnpx playwright install --with-deps
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
 
       - name: Run tests
         run: pnpm test
@@ -36,18 +65,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+      - name: Check cache
+        uses: actions/cache@v3
+        id: cache
         with:
-          version: 7.x.x
+          path: ~/.local/share/rtx
+          key: rtx-tools-${{ hashFiles('.tool-versions') }}
+          restore-keys: rtx-tools-
 
-      - name: Setup node
-        uses: actions/setup-node@v2
+      - name: Setup tool versions
+        uses: jdxcode/rtx-action@v1
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
         with:
-          node-version: "16.x"
-          cache: pnpm
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-store-
 
       - name: Install dependencies
         run: pnpm install
@@ -59,18 +102,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+      - name: Check cache
+        uses: actions/cache@v3
+        id: cache
         with:
-          version: 7.x.x
+          path: ~/.local/share/rtx
+          key: rtx-tools-${{ hashFiles('.tool-versions') }}
+          restore-keys: rtx-tools-
 
-      - name: Setup node
-        uses: actions/setup-node@v2
+      - name: Setup tool versions
+        uses: jdxcode/rtx-action@v1
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
         with:
-          node-version: "16.x"
-          cache: pnpm
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-store-
 
       - name: Install dependencies
         run: pnpm install

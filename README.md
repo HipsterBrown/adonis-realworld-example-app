@@ -26,7 +26,7 @@ Functionality is tested end-to-end using the [provided testing framework](https:
 
 ## Getting started
 
-This codebase relies on [Node.js](https://nodejs.org/en/) version 14+ as the runtime and [pnpm](https://pnpm.io/) for package management. I suggest using something like [volta](https://volta.sh/) to quickly install and manage Node.js and associated tooling on your system. After those prerequisites have been met, run the follow commands to get started:
+This codebase relies on [Node.js](https://nodejs.org/en/) version 18+ as the runtime and [pnpm](https://pnpm.io/) for package management. I suggest using something like [rtx](https://github.com/jdxcode/rtx) or [volta](https://volta.sh/) to quickly install and manage Node.js and associated tooling on your system. After those prerequisites have been met, run the follow commands to get started:
 
 ```
 cp .env.example .env
