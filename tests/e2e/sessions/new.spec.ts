@@ -9,33 +9,28 @@ test.group('sessions/new', (group) => {
     return () => Database.rollbackGlobalTransaction()
   })
 
-  test('user can log in', async ({ assert, page, getScreen }) => {
+  test('user can log in', async ({ visit }) => {
     const profile = await ProfileFactory.with('user', 1, (user) =>
       user.merge({ email: 'test.person@example.com', password: 'SuperSecret123' })
     ).create()
 
-    await page.goto('/')
-    let screen = await getScreen()
+    const screen = await visit('/')
 
-    const loginLink = await screen.findByRole('link', { name: /Sign in/ })
+    const loginLink = screen.getByRole('link', { name: /Sign in/ })
     await loginLink.click()
 
-    screen = await getScreen()
+    await screen.assertExists(screen.getByRole('heading', { level: 1, name: 'Sign in' }))
+    await screen.assertExists(screen.getByRole('link', { name: "Don't have an account?" }))
 
-    assert.exists(await screen.findByRole('heading', { level: 1, name: 'Sign in' }))
-    assert.exists(await screen.findByRole('link', { name: "Don't have an account?" }))
-
-    const emailInput = await screen.findByLabelText('email')
-    const passwordInput = await screen.findByLabelText('password')
+    const emailInput = screen.getByLabel('email')
+    const passwordInput = screen.getByLabel('password')
 
     await emailInput.fill('test.person@example.com')
     await passwordInput.fill('SuperSecret123')
 
-    const signInButton = await screen.findByRole('button', { name: /Sign in/ })
+    const signInButton = screen.getByRole('button', { name: /Sign in/ })
     await signInButton.click()
 
-    screen = await getScreen()
-
-    assert.exists(await screen.findByRole('link', { name: profile.name }))
+    await screen.assertExists(screen.getByRole('link', { name: profile.name }))
   })
 })

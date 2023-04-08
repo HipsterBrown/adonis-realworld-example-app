@@ -14,43 +14,40 @@ test.group('articles/show', (group) => {
     }
   })
 
-  test('displays article content', async ({ assert, page, route, getScreen }) => {
+  test('displays article content', async ({ route, visit }) => {
     const profile = await ProfileFactory.with('user').create()
     const article = await ArticleFactory.merge({ userId: profile.userId }).create()
 
-    await page.goto(route('articles.show', article))
-    let screen = await getScreen()
+    const screen = await visit(route('articles.show', article))
 
-    assert.exists(await screen.findByRole('heading', { level: 1, name: article.title }))
-    assert.lengthOf(await screen.findAllByRole('link', { name: profile.name }), 2)
-    assert.lengthOf(await screen.findAllByRole('button', { name: /Follow / }), 2)
-    assert.lengthOf(await screen.findAllByRole('button', { name: /Favorite post/ }), 2)
-    assert.exists(await screen.findByText(/to add comments on this article/))
+    await screen.assertExists(screen.getByRole('heading', { level: 1, name: article.title }))
+    await screen.assertElementsCount(screen.getByRole('link', { name: profile.name }), 2)
+    await screen.assertElementsCount(screen.getByRole('button', { name: /Follow / }), 2)
+    await screen.assertElementsCount(screen.getByRole('button', { name: /Favorite post/ }), 2)
+    await screen.assertExists(screen.getByText(/to add comments on this article/))
   })
 
-  test('article authors can delete', async ({ assert, page, route, login, getScreen }) => {
+  test('article authors can delete', async ({ assert, browserContext, route, visit }) => {
     const profile = await ProfileFactory.with('user', 1, (user) =>
       user.merge({ email: 'test.person@example.com', password: 'SuperSecret123' })
     ).create()
     const article = await ArticleFactory.merge({ userId: profile.userId }).create()
 
-    await page.goto(route('articles.show', article))
-    let screen = await getScreen()
+    let screen = await visit(route('articles.show', article))
 
-    assert.notExists(await screen.queryByRole('button', { name: /Delete Article/ }))
+    await screen.assertNotExists(screen.getByRole('button', { name: /Delete Article/ }))
 
-    await login('test.person@example.com', 'SuperSecret123')
+    await browserContext.login('test.person@example.com', 'SuperSecret123')
 
-    await page.goto(route('articles.show', article))
-    screen = await getScreen()
+    screen = await visit(route('articles.show', article))
 
-    const [deleteButton] = await screen.findAllByRole('button', { name: /Delete Article/ })
+    const [deleteButton] = await screen.getByRole('button', { name: /Delete Article/ }).all()
     await deleteButton.click()
 
     assert.notExists(await Article.find(article.id))
   })
 
-  test('displays article comments', async ({ assert, page, route, login, getScreen }) => {
+  test('displays article comments', async ({ browserContext, route, visit }) => {
     const commenter = await ProfileFactory.with('user', 1, (user) =>
       user.merge({ email: 'test.person@example.com', password: 'SuperSecret123' })
     ).create()
@@ -62,53 +59,47 @@ test.group('articles/show', (group) => {
       authorId: commenter.id,
     }).create()
 
-    await page.goto(route('articles.show', article))
-    let screen = await getScreen()
+    let screen = await visit(route('articles.show', article))
 
-    assert.exists(await screen.findByRole('link', { name: commenter.name }))
-    assert.lengthOf(await screen.findAllByRole('article'), 1)
-    assert.exists(await screen.findByText(comment.body))
-    assert.notExists(await screen.queryByRole('link', { name: 'Edit your comment' }))
-    assert.notExists(await screen.queryByRole('button', { name: 'Delete your comment' }))
+    await screen.assertExists(screen.getByRole('link', { name: commenter.name }))
+    await screen.assertElementsCount(screen.getByRole('article'), 1)
+    await screen.assertExists(screen.getByText(comment.body))
+    await screen.assertNotExists(screen.getByRole('link', { name: 'Edit your comment' }))
+    await screen.assertNotExists(screen.getByRole('button', { name: 'Delete your comment' }))
 
-    await login('test.person@example.com', 'SuperSecret123')
+    await browserContext.login('test.person@example.com', 'SuperSecret123')
 
-    await page.goto(route('articles.show', article))
-    screen = await getScreen()
+    screen = await visit(route('articles.show', article))
 
-    assert.exists(
-      await screen.findByRole('link', {
+    await screen.assertExists(
+      screen.getByRole('link', {
         name: 'Edit your comment',
       })
     )
-    assert.exists(
-      await screen.findByRole('button', {
+    await screen.assertExists(
+      screen.getByRole('button', {
         name: 'Delete your comment',
       })
     )
 
-    const commentBodyInput = await screen.findByLabelText('Comment body')
+    const commentBodyInput = screen.getByLabel('Comment body')
     await commentBodyInput.fill('This is a new comment!')
-    await screen.findByRole('button', { name: 'Post Comment' }).then((el) => el.click())
+    await screen.getByRole('button', { name: 'Post Comment' }).click()
 
-    screen = await getScreen()
-    assert.exists(await screen.findByText('This is a new comment!'))
+    await screen.assertExists(screen.getByText('This is a new comment!'))
 
-    const [deleteButton] = await screen.findAllByRole('button', {
+    const [deleteButton] = await screen.getByRole('button', {
       name: 'Delete your comment',
-    })
+    }).all()
     await deleteButton.click()
 
-    screen = await getScreen()
-    assert.notExists(await screen.queryByText('This is a new comment!'))
+    await screen.assertNotExists(screen.getByText('This is a new comment!'))
   })
 
   test('logged in users can favorite articles', async ({
-    assert,
-    page,
-    login,
+    browserContext,
     route,
-    getScreen,
+    visit,
   }) => {
     await ProfileFactory.with('user', 1, (user) =>
       user.merge({ email: 'test.person@example.com', password: 'SuperSecret123' })
@@ -117,35 +108,29 @@ test.group('articles/show', (group) => {
       profile.with('user')
     ).create()
 
-    await page.goto(route('articles.show', article))
-    let screen = await getScreen()
+    let screen = await visit(route('articles.show', article))
 
-    const [favoriteButton] = await screen.findAllByRole('button', { name: 'Favorite post' })
+    const [favoriteButton] = await screen.getByRole('button', { name: 'Favorite post' }).all()
     await favoriteButton.click()
 
-    screen = await getScreen()
-    assert.exists(await screen.findByRole('heading', { level: 1, name: 'Sign in' }))
+    await screen.assertExists(screen.getByRole('heading', { level: 1, name: 'Sign in' }))
 
-    await login('test.person@example.com', 'SuperSecret123')
+    await browserContext.login('test.person@example.com', 'SuperSecret123')
 
-    await page.goto(route('articles.show', article))
-    screen = await getScreen()
+    screen = await visit(route('articles.show', article))
 
-    const [favButton] = await screen.findAllByRole('button', {
+    const [favButton] = await screen.getByRole('button', {
       name: 'Favorite post',
-    })
+    }).all()
     await favButton.click()
 
-    screen = await getScreen()
-    assert.lengthOf(await screen.findAllByRole('button', { name: 'Unfavorite post' }), 2)
+    await screen.assertElementsCount(screen.getByRole('button', { name: 'Unfavorite post' }), 2)
   })
 
   test('logged in users can follow article authors', async ({
-    assert,
-    page,
-    login,
+    browserContext,
     route,
-    getScreen,
+    visit,
   }) => {
     await ProfileFactory.with('user', 1, (user) =>
       user.merge({ email: 'test.person@example.com', password: 'SuperSecret123' })
@@ -154,26 +139,22 @@ test.group('articles/show', (group) => {
       profile.with('user')
     ).create()
 
-    await page.goto(route('articles.show', article))
-    let screen = await getScreen()
+    let screen = await visit(route('articles.show', article))
 
-    const [followButton] = await screen.findAllByRole('button', { name: /Follow/ })
+    const [followButton] = await screen.getByRole('button', { name: /Follow/ }).all()
     await followButton.click()
 
-    screen = await getScreen()
-    assert.exists(await screen.findByRole('heading', { level: 1, name: 'Sign in' }))
+    await screen.assertExists(screen.getByRole('heading', { level: 1, name: 'Sign in' }))
 
-    await login('test.person@example.com', 'SuperSecret123')
+    await browserContext.login('test.person@example.com', 'SuperSecret123')
 
-    await page.goto(route('articles.show', article))
-    screen = await getScreen()
+    screen = await visit(route('articles.show', article))
 
-    const [folButton] = await screen.findAllByRole('button', {
+    const [folButton] = await screen.getByRole('button', {
       name: /Follow/,
-    })
+    }).all()
     await folButton.click()
 
-    screen = await getScreen()
-    assert.lengthOf(await screen.findAllByRole('button', { name: /Unfollow/ }), 2)
+    await screen.assertElementsCount(screen.getByRole('button', { name: /Unfollow/ }), 2)
   })
 })

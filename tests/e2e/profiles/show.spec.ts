@@ -11,10 +11,8 @@ test.group('profiles/show', (group) => {
   })
 
   test('displays profile info with authored and favorited articles', async ({
-    assert,
-    page,
     route,
-    getScreen,
+    visit,
   }) => {
     const profile = await ProfileFactory.merge({
       name: 'TestPerson',
@@ -30,28 +28,23 @@ test.group('profiles/show', (group) => {
       .merge({ profileId: profile.id })
       .createMany(3)
 
-    await page.goto(route('profiles.show', profile))
-    let screen = await getScreen()
+    const screen = await visit(route('profiles.show', profile))
 
-    assert.exists(await screen.findByRole('heading', { level: 1, name: 'TestPerson' }))
-    assert.exists(await screen.findByText('I am a test person'))
-    assert.exists(await screen.findByRole('link', { name: 'My Articles' }))
-    assert.exists(await screen.findByRole('link', { name: 'Favorited Articles' }))
+    await screen.assertExists(screen.getByRole('heading', { name: 'TestPerson' }))
+    await screen.assertExists(screen.getByText('I am a test person'))
+    await screen.assertExists(screen.getByRole('link', { name: 'My Articles' }))
+    await screen.assertExists(screen.getByRole('link', { name: 'Favorited Articles' }))
 
-    assert.lengthOf(await screen.findAllByRole('article'), 5)
-    await page.click('text="Favorited Articles"')
+    await screen.assertElementsCount(screen.getByRole('article'), 5)
+    await screen.click('text="Favorited Articles"')
 
-    screen = await getScreen()
-
-    assert.lengthOf(await screen.findAllByRole('article'), 3)
+    await screen.assertElementsCount(screen.getByRole('article'), 3)
   })
 
   test('logged in user does not see follow button on their profile', async ({
-    assert,
-    page,
     route,
-    login,
-    getScreen,
+    visit,
+    browserContext,
   }) => {
     const profile = await ProfileFactory.merge({
       name: 'TestPerson',
@@ -62,20 +55,17 @@ test.group('profiles/show', (group) => {
       )
       .create()
 
-    await login('test.person@example.com', 'SuperSecret123')
+    await browserContext.login('test.person@example.com', 'SuperSecret123')
 
-    await page.goto(route('profiles.show', profile))
-    let screen = await getScreen()
+    const screen = await visit(route('profiles.show', profile))
 
-    assert.notExists(await screen.queryByRole('button', { name: /Follow/ }))
+    await screen.assertNotExists(screen.getByRole('button', { name: /Follow/ }))
   })
 
   test('logged in user can follow another user from their profile', async ({
-    assert,
-    page,
     route,
-    login,
-    getScreen,
+    visit,
+    browserContext,
   }) => {
     const following = await ProfileFactory.merge({
       name: 'TestPerson',
@@ -92,17 +82,14 @@ test.group('profiles/show', (group) => {
       )
       .create()
 
-    await login('test.person@example.com', 'SuperSecret123')
+    await browserContext.login('test.person@example.com', 'SuperSecret123')
 
-    await page.goto(route('profiles.show', following))
-    let screen = await getScreen()
+    const screen = await visit(route('profiles.show', following))
 
-    const followButton = await screen.findByRole('button', { name: /Follow/ })
+    const followButton = screen.getByRole('button', { name: /Follow/ })
 
     await followButton.click()
 
-    screen = await getScreen()
-
-    assert.exists(await screen.findByRole('button', { name: /Unfollow/ }))
+    await screen.assertExists(screen.getByRole('button', { name: /Unfollow/ }))
   })
 })

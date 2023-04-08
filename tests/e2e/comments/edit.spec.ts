@@ -11,7 +11,7 @@ test.group('comments/edit', (group) => {
     return () => Database.rollbackGlobalTransaction()
   })
 
-  test('comment author can edit body', async ({ assert, page, login, route, getScreen }) => {
+  test('comment author can edit body', async ({ assert, browserContext, route, visit }) => {
     const commenter = await ProfileFactory.with('user', 1, (user) =>
       user.merge({ email: 'test.person@example.com', password: 'SuperSecret123' })
     ).create()
@@ -24,26 +24,22 @@ test.group('comments/edit', (group) => {
       body: 'The original comment text',
     }).create()
 
-    await login('test.person@example.com', 'SuperSecret123')
+    await browserContext.login('test.person@example.com', 'SuperSecret123')
 
-    await page.goto(route('articles.show', article))
-    let screen = await getScreen()
+    const screen = await visit(route('articles.show', article))
 
-    const editLink = await screen.getByRole('link', { name: /Edit your comment/ })
+    const editLink = screen.getByRole('link', { name: /Edit your comment/ })
     await editLink.click()
 
-    screen = await getScreen()
+    await screen.assertExists(screen.getByRole('heading', { level: 1, name: 'Update comment' }))
 
-    assert.exists(await screen.findByRole('heading', { level: 1, name: 'Update comment' }))
-
-    const bodyInput = await screen.findByLabelText('Comment body')
-    const updateButton = await screen.findByRole('button', { name: 'Update Comment' })
+    const bodyInput = screen.getByLabel('Comment body')
+    const updateButton = screen.getByRole('button', { name: 'Update Comment' })
 
     assert.equal(await bodyInput.inputValue(), 'The original comment text')
     await bodyInput.fill('Brand new comment content!')
     await updateButton.click()
 
-    screen = await getScreen()
-    assert.exists(await screen.findByText('Brand new comment content!'))
+    await screen.assertExists(screen.getByText('Brand new comment content!'))
   })
 })

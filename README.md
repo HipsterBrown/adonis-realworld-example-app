@@ -21,9 +21,7 @@ The app uses [resourceful routes and controller actions](https://docs.adonisjs.c
 
 No client-side JavaScript is used as none was required to match the expected feature-set described by the [RealWorld spec](https://realworld-docs.netlify.app/docs/intro).
 
-Functionality is tested end-to-end using the [provided testing framework](https://docs.adonisjs.com/guides/testing/introduction) with a custom plugin to integrate [Playwright](https://playwright.dev/) browser control and [Testing Library](https://github.com/testing-library/playwright-testing-library) queries. Run `pnpm test`, after going through the "Getting started" section below, to see the full coverage. These run headless in Firefox by default; view the live browser interactions by setting the `HEADLESS` environment variable to "0". 
-
-_See the custom plugin code in the `tests/bootstrap.ts` until it is abstracted out into its own package_
+Functionality is tested end-to-end using the [provided testing framework](https://docs.adonisjs.com/guides/testing/introduction) with a [plugin from japa](https://japa.dev/docs/plugins/browser-client#setup) to integrate [Playwright](https://playwright.dev/) browser control. Run `pnpm test`, after going through the "Getting started" section below, to see the full coverage. These run headless by default. 
 
 
 ## Getting started

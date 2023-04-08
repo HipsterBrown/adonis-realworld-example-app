@@ -11,25 +11,22 @@ test.group('articles/new', (group) => {
     }
   })
 
-  test('creates new articles for logged in user', async ({ assert, page, login, getScreen }) => {
+  test('creates new articles for logged in user', async ({ browserContext, visit }) => {
     const profile = await ProfileFactory.with('user', 1, (user) =>
       user.merge({ email: 'test.person@example.com', password: 'SuperSecret123' })
     ).create()
 
-    await login('test.person@example.com', 'SuperSecret123')
+    await browserContext.login('test.person@example.com', 'SuperSecret123')
 
-    await page.goto('/')
-    let screen = await getScreen()
+    const screen = await visit('/')
 
-    await screen.findByRole('link', { name: 'New Article' }).then((el) => el.click())
+    await screen.getByRole('link', { name: 'New Article' }).click()
 
-    screen = await getScreen()
-
-    const title = await screen.findByLabelText('article title')
-    const description = await screen.findByLabelText("What's this article about?")
-    const content = await screen.findByLabelText('article content')
-    const tags = await screen.findByLabelText('enter tags (comma separated)')
-    const publishButton = await screen.findByRole('button', { name: 'Publish Article' })
+    const title = screen.getByLabel('article title')
+    const description = screen.getByLabel("What's this article about?")
+    const content = screen.getByLabel('article content')
+    const tags = screen.getByLabel('enter tags (comma separated)')
+    const publishButton = screen.getByRole('button', { name: 'Publish Article' })
 
     await title.fill('My new article')
     await description.fill('This is a brand new article')
@@ -39,10 +36,9 @@ test.group('articles/new', (group) => {
     await tags.fill('new, test, article')
     await publishButton.click()
 
-    screen = await getScreen()
-    assert.exists(await screen.findByRole('heading', { level: 1, name: 'My new article' }))
-    assert.exists(await screen.findByRole('heading', { level: 2, name: 'New Article' }))
-    assert.exists(await screen.findByRole('link', { name: 'here' }))
-    assert.lengthOf(await screen.findAllByRole('link', { name: profile.name }), 3)
+    await screen.assertExists(screen.getByRole('heading', { level: 1, name: 'My new article' }))
+    await screen.assertExists(screen.getByRole('heading', { level: 2, name: 'New Article' }))
+    await screen.assertExists(screen.getByRole('link', { name: 'here' }))
+    await screen.assertElementsCount(screen.getByRole('link', { name: profile.name }), 3)
   })
 })

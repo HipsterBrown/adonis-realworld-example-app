@@ -14,10 +14,9 @@ test.group('articles/edit', (group) => {
 
   test('logged in user can update article fields', async ({
     assert,
-    page,
+    browserContext,
     route,
-    login,
-    getScreen,
+    visit,
   }) => {
     const profile = await ProfileFactory.with('user', 1, (user) =>
       user.merge({ email: 'test.person@example.com', password: 'SuperSecret123' })
@@ -28,25 +27,21 @@ test.group('articles/edit', (group) => {
       body: 'This is the original content',
     }).create()
 
-    await page.goto(route('articles.show', article))
-    let screen = await getScreen()
+    let screen = await visit(route('articles.show', article))
 
-    assert.exists(await screen.findByRole('heading', { level: 1, name: 'Original title' }))
-    assert.exists(await screen.findByText('This is the original content'))
-    assert.notExists(await screen.queryByRole('link', { name: /Edit Article/ }))
+    await screen.assertExists(screen.getByRole('heading', { level: 1, name: 'Original title' }))
+    await screen.assertExists(screen.getByText('This is the original content'))
+    await screen.assertNotExists(screen.getByRole('link', { name: /Edit Article/ }))
 
-    await login('test.person@example.com', 'SuperSecret123')
+    await browserContext.login('test.person@example.com', 'SuperSecret123')
 
-    await page.goto(route('articles.show', article))
-    screen = await getScreen()
+    screen = await visit(route('articles.show', article))
 
-    const [editLink] = await screen.findAllByRole('link', { name: /Edit Article/ })
+    const [editLink] = await screen.getByRole('link', { name: /Edit Article/ }).all()
     await editLink.click()
 
-    screen = await getScreen()
-
-    const title = await screen.findByLabelText('article title')
-    const content = await screen.findByLabelText('article content')
+    const title = screen.getByLabel('article title')
+    const content = screen.getByLabel('article content')
 
     assert.equal(await title.inputValue(), 'Original title')
     assert.equal(await content.inputValue(), 'This is the original content')
@@ -54,12 +49,10 @@ test.group('articles/edit', (group) => {
     await title.fill('New title')
     await content.fill('The article has been updated with new content')
 
-    const updateButton = await screen.findByRole('button', { name: 'Update Article' })
+    const updateButton = screen.getByRole('button', { name: 'Update Article' })
     await updateButton.click()
 
-    screen = await getScreen()
-
-    assert.exists(await screen.findByRole('heading', { level: 1, name: 'New title' }))
-    assert.exists(await screen.findByText('The article has been updated with new content'))
+    await screen.assertExists(screen.getByRole('heading', { level: 1, name: 'New title' }))
+    await screen.assertExists(screen.getByText('The article has been updated with new content'))
   })
 })

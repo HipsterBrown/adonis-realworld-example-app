@@ -9,7 +9,7 @@ test.group('profiles/edit', (group) => {
     return () => Database.rollbackGlobalTransaction()
   })
 
-  test('logged in user can edit their profile', async ({ assert, page, login, getScreen }) => {
+  test('logged in user can edit their profile', async ({ assert, visit, browserContext }) => {
     const profile = await ProfileFactory.merge({
       name: 'TestPerson',
       bio: 'I am a test person',
@@ -19,23 +19,20 @@ test.group('profiles/edit', (group) => {
       )
       .create()
 
-    await login('test.person@example.com', 'SuperSecret123')
+    await browserContext.login('test.person@example.com', 'SuperSecret123')
 
-    await page.goto('/')
-    let screen = await getScreen()
-    const settingsLink = await screen.findByRole('link', { name: /Settings/ })
+    let screen = await visit('/')
+    const settingsLink = screen.getByRole('link', { name: /Settings/ })
 
     await settingsLink.click()
 
-    screen = await getScreen()
+    await screen.assertExists(screen.getByRole('heading', { level: 1, name: 'Your Settings' }))
 
-    assert.exists(await screen.findByRole('heading', { level: 1, name: 'Your Settings' }))
-
-    const nameInput = await screen.findByLabelText('your name')
-    const bioInput = await screen.findByLabelText('short bio about you')
-    const emailInput = await screen.findByLabelText('email')
-    const passwordInput = await screen.findByLabelText('new password')
-    const updateButton = await screen.findByRole('button', { name: 'Update Settings' })
+    const nameInput = screen.getByLabel('your name')
+    const bioInput = screen.getByLabel('short bio about you')
+    const emailInput = screen.getByLabel('email')
+    const passwordInput = screen.getByLabel('new password')
+    const updateButton = screen.getByRole('button', { name: 'Update Settings' })
 
     assert.equal(await nameInput.inputValue(), 'TestPerson')
     assert.equal(await bioInput.inputValue(), 'I am a test person')
@@ -49,8 +46,6 @@ test.group('profiles/edit', (group) => {
 
     await updateButton.click()
 
-    screen = await getScreen()
-
     await profile.refresh()
     assert.equal(profile.name, 'NewName')
     assert.equal(profile.bio, 'I am a brand new me!')
@@ -59,21 +54,18 @@ test.group('profiles/edit', (group) => {
       'new.person@example.com'
     )
 
-    assert.exists(await screen.findByDisplayValue('NewName'))
-    assert.exists(await screen.findByDisplayValue('I am a brand new me!'))
-    assert.exists(await screen.findByDisplayValue('new.person@example.com'))
+    assert.equal(await nameInput.inputValue(), 'NewName')
+    assert.equal(await bioInput.inputValue(), 'I am a brand new me!')
+    assert.equal(await emailInput.inputValue(), 'new.person@example.com')
 
-    const logoutButton = await screen.findByRole('button', { name: /click here to logout/ })
+    const logoutButton = screen.getByRole('button', { name: /click here to logout/ })
     await logoutButton.click()
 
-    screen = await getScreen()
+    await screen.assertNotExists(screen.getByRole('link', { name: /Settings/ }))
 
-    assert.notExists(await screen.queryByRole('link', { name: /Settings/ }))
+    await browserContext.login('new.person@example.com', 'SuperDuperSecret123')
 
-    await login('new.person@example.com', 'SuperDuperSecret123')
-
-    screen = await getScreen()
-
-    assert.exists(await screen.findByRole('link', { name: /NewName/ }))
+    screen = await visit('/')
+    await screen.assertExists(screen.getByRole('link', { name: 'NewName' }))
   })
 })
