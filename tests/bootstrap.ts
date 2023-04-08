@@ -12,7 +12,7 @@ import { browserClient, decoratorsCollection } from '@japa/browser-client'
 
 decoratorsCollection.register({
   context(context) {
-    context.login = async function(email: string, password: string) {
+    context.login = async function (email: string, password: string) {
       const page = await context.visit('/login')
       const emailInput = page.getByLabel('email')
       const passwordInput = page.getByLabel('password')

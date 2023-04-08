@@ -30,7 +30,10 @@ test.group('articles/index', (group) => {
     await screen.assertExists(screen.getByRole('heading', { name: 'conduit' }))
     await screen.assertExists(screen.getByRole('link', { name: 'Global Feed' }))
     await screen.assertExists(screen.getByText('Popular Tags'))
-    await screen.assertElementsCount(screen.getByRole('link', { name: /view articles tagged as/ }), 5)
+    await screen.assertElementsCount(
+      screen.getByRole('link', { name: /view articles tagged as/ }),
+      5
+    )
     // pagination
     await screen.assertElementsCount(screen.getByRole('link', { name: /^\d$/ }), 3)
     await screen.assertElementsCount(screen.getByRole('article'), 10)
@@ -42,7 +45,10 @@ test.group('articles/index', (group) => {
     await screen.assertExists(screen.getByText('No articles here...yet.'))
     await screen.assertElementsCount(screen.getByRole('article'), 0)
     await screen.assertElementsCount(screen.getByRole('link', { name: /^\d$/ }), 0)
-    await screen.assertElementsCount(screen.getByRole('link', { name: /view articles tagged as/ }), 0)
+    await screen.assertElementsCount(
+      screen.getByRole('link', { name: /view articles tagged as/ }),
+      0
+    )
   })
 
   test('tag links filter list of posts', async ({ visit }) => {
