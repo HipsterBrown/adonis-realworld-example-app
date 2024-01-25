@@ -78,5 +78,6 @@
     "reflect-metadata": "^0.1.13",
     "sanitize-html": "^2.10.0",
     "sqlite3": "^5.1.6"
-  }
+  },
+  "type": "module"
 }
