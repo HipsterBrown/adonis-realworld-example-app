@@ -7,9 +7,9 @@
 
 import env from '#start/env'
 import app from '@adonisjs/core/services/app'
-import { sessionConfig } from '@adonisjs/session/build/config'
+import { defineConfig } from "@adonisjs/session";
 
-export default sessionConfig({
+export default defineConfig({
   /*
   |--------------------------------------------------------------------------
   | Enable/Disable sessions

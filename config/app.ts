@@ -13,6 +13,7 @@ import { AssetsManagerConfig } from '@ioc:Adonis/Core/AssetsManager'
 import { ServerConfig } from "@adonisjs/core/services/server";
 import { LoggerConfig } from "@adonisjs/core/types/logger";
 import { ValidatorConfig } from "@adonisjs/validator/types";
+import { defineConfig } from "@adonisjs/core/http";
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +39,7 @@ export const appKey: string = env.get('APP_KEY')
 | the config properties to make keep server secure.
 |
 */
-export const http: ServerConfig = {
+export const http = defineConfig({
   /*
   |--------------------------------------------------------------------------
   | Allow method spoofing
@@ -111,7 +112,7 @@ export const http: ServerConfig = {
     secure: false,
     sameSite: false,
   },
-}
+})
 
 /*
 |--------------------------------------------------------------------------

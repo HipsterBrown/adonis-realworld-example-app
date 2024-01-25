@@ -6,8 +6,9 @@
  */
 
 import { BodyParserConfig } from '@adonisjs/core/bodyparser'
+import { defineConfig } from "@adonisjs/core/bodyparser";
 
-const bodyParserConfig: BodyParserConfig = {
+const bodyParserConfig = defineConfig({
   /*
   |--------------------------------------------------------------------------
   | White listed methods
@@ -200,6 +201,6 @@ const bodyParserConfig: BodyParserConfig = {
     */
     types: ['multipart/form-data'],
   },
-}
+})
 
 export default bodyParserConfig
