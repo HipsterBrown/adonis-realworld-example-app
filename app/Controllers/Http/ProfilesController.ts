@@ -1,7 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import Article from '../../Models/Article'
-import Profile from '../../Models/Profile'
-import UpdateProfileValidator from '../../Validators/UpdateProfileValidator'
+import Article from '../../Models/Article.js'
+import Profile from '../../Models/Profile.js'
+import UpdateProfileValidator from '../../Validators/UpdateProfileValidator.js'
 
 export default class ProfilesController {
   public async show({ view, params, request }: HttpContext) {

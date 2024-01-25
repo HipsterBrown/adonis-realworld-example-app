@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
-import Article from './Article'
-import Profile from './Profile'
+import Article from './Article.js'
+import Profile from './Profile.js'
 import { BelongsTo } from "@adonisjs/lucid/types/relations";
 
 export default class Comment extends BaseModel {

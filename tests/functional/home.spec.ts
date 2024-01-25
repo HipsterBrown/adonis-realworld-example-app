@@ -1,6 +1,6 @@
 import db from '@adonisjs/lucid/services/db'
 import { test } from '@japa/runner'
-import TagFactory from '../../database/factories/TagFactory'
+import TagFactory from '../../database/factories/TagFactory.js'
 
 test.group('home', (group) => {
   group.each.setup(async () => {

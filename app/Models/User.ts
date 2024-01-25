@@ -7,8 +7,8 @@ import {
   hasOne,
   hasMany
 } from '@adonisjs/lucid/orm'
-import Profile from './Profile'
-import Article from './Article'
+import Profile from './Profile.js'
+import Article from './Article.js'
 import { HasOne } from "@adonisjs/lucid/types/relations";
 import { HasMany } from "@adonisjs/lucid/types/relations";
 

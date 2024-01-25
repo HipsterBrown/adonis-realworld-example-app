@@ -1,6 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import Follow from '../../Models/Follow'
-import Profile from '../../Models/Profile'
+import Follow from '../../Models/Follow.js'
+import Profile from '../../Models/Profile.js'
 
 export default class FollowersController {
   public async create({ auth, params, response }: HttpContext) {

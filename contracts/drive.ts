@@ -6,7 +6,7 @@
  */
 
 import { InferDisksFromConfig } from '@adonisjs/core/build/config'
-import driveConfig from '../config/drive'
+import driveConfig from '../config/drive.js'
 
 declare module '@ioc:Adonis/Core/Drive' {
   interface DisksList extends InferDisksFromConfig<typeof driveConfig> {}

@@ -1,6 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import Article from '../../Models/Article'
-import Comment from '../../Models/Comment'
+import Article from '../../Models/Article.js'
+import Comment from '../../Models/Comment.js'
 
 export default class CommentsController {
   public async index({}: HttpContext) {}

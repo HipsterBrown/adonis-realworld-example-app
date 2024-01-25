@@ -1,5 +1,5 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import CreateSessionValidator from '../../Validators/CreateSessionValidator'
+import CreateSessionValidator from '../../Validators/CreateSessionValidator.js'
 
 export default class SessionsController {
   public async index({}: HttpContext) {}

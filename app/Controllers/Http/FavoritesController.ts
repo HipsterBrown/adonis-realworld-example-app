@@ -1,6 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import Article from '../../Models/Article'
-import Favorite from '../../Models/Favorite'
+import Article from '../../Models/Article.js'
+import Favorite from '../../Models/Favorite.js'
 
 export default class FavoritesController {
   public async create({ params, response, auth }: HttpContext) {

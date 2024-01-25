@@ -1,5 +1,5 @@
-import User from '../../app/Models/User'
-import Profile from '../../app/Models/Profile'
+import User from '../../app/Models/User.js'
+import Profile from '../../app/Models/Profile.js'
 import Factory from '@adonisjs/lucid/factories'
 
 export const UserFactory = Factory.define(User, ({ faker }) => {
