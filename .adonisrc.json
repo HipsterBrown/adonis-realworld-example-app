@@ -1,10 +1,8 @@
 {
   "typescript": true,
   "commands": [
-    "./commands",
-    "@adonisjs/core/build/commands/index.js",
-    "@adonisjs/repl/build/commands",
-    "@adonisjs/lucid/build/commands"
+    "@adonisjs/core/commands",
+    "@adonisjs/lucid/commands"
   ],
   "exceptionHandlerNamespace": "App/Exceptions/Handler",
   "aliases": {
@@ -19,12 +17,20 @@
   ],
   "providers": [
     "./providers/AppProvider",
-    "@adonisjs/core",
-    "@adonisjs/session",
-    "@adonisjs/view",
-    "@adonisjs/shield",
-    "@adonisjs/lucid",
-    "@adonisjs/auth",
+    "@adonisjs/core/providers/app_provider",
+    "@adonisjs/core/providers/hash_provider",
+    {
+      "file": "@adonisjs/core/providers/repl_provider",
+      "environment": [
+        "repl",
+        "test"
+      ]
+    },
+    "@adonisjs/session/session_provider",
+    "@adonisjs/core/providers/edge_provider",
+    "@adonisjs/shield/shield_provider",
+    "@adonisjs/lucid/database_provider",
+    "@adonisjs/auth/auth_provider",
     "@adonisjs/lucid-slugify"
   ],
   "metaFiles": [
