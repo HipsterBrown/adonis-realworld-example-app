@@ -1,13 +1,13 @@
-import Database from '@ioc:Adonis/Lucid/Database'
+import db from '@adonisjs/lucid/services/db'
 import { test } from '@japa/runner'
 import { ArticleFactory, FavoriteFactory } from '#database/factories/ArticleFactory'
 import { ProfileFactory } from '#database/factories/ProfileFactory'
 
 test.group('profiles/show', (group) => {
   group.each.setup(async () => {
-    await Database.beginGlobalTransaction()
+    await db.beginGlobalTransaction()
 
-    return () => Database.rollbackGlobalTransaction()
+    return () => db.rollbackGlobalTransaction()
   })
 
   test('displays profile info with authored and favorited articles', async ({ route, visit }) => {

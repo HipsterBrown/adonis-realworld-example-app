@@ -1,5 +1,5 @@
 import Article from '../../app/Models/Article'
-import Factory from '@ioc:Adonis/Lucid/Factory'
+import Factory from '@adonisjs/lucid/factories'
 import { ProfileFactory, UserFactory } from './ProfileFactory'
 import TagFactory from './TagFactory'
 import { CommentFactory } from './CommentFactory'

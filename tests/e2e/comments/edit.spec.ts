@@ -1,4 +1,4 @@
-import Database from '@ioc:Adonis/Lucid/Database'
+import db from '@adonisjs/lucid/services/db'
 import { test } from '@japa/runner'
 import { ArticleFactory } from '#database/factories/ArticleFactory'
 import { CommentFactory } from '#database/factories/CommentFactory'
@@ -6,9 +6,9 @@ import { ProfileFactory } from '#database/factories/ProfileFactory'
 
 test.group('comments/edit', (group) => {
   group.each.setup(async () => {
-    await Database.beginGlobalTransaction()
+    await db.beginGlobalTransaction()
 
-    return () => Database.rollbackGlobalTransaction()
+    return () => db.rollbackGlobalTransaction()
   })
 
   test('comment author can edit body', async ({ assert, browserContext, route, visit }) => {

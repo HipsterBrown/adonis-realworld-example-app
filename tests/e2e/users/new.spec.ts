@@ -1,12 +1,12 @@
-import Database from '@ioc:Adonis/Lucid/Database'
+import db from '@adonisjs/lucid/services/db'
 import { test } from '@japa/runner'
 import User from '#app/Models/User'
 
 test.group('users/new', (group) => {
   group.each.setup(async () => {
-    await Database.beginGlobalTransaction()
+    await db.beginGlobalTransaction()
 
-    return () => Database.rollbackGlobalTransaction()
+    return () => db.rollbackGlobalTransaction()
   })
 
   test('user can sign up and be authenticated', async ({ assert, visit }) => {

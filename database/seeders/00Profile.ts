@@ -1,4 +1,4 @@
-import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
+import BaseSeeder from '@adonisjs/lucid/seeders'
 import { faker } from '@faker-js/faker'
 import Profile from '../../app/Models/Profile'
 import User from '../../app/Models/User'

@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import Article from './Article'
 import Profile from './Profile'
+import { BelongsTo } from "@adonisjs/lucid/types/relations";
 
 export default class Favorite extends BaseModel {
   @column({ isPrimary: true })

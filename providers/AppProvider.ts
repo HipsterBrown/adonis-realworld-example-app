@@ -1,10 +1,10 @@
-import { ApplicationContract } from '@ioc:Adonis/Core/Application'
 import sanitizeHTML from 'sanitize-html'
 import { marked } from 'marked'
 import { DateTime } from 'luxon'
+import { ApplicationService } from "@adonisjs/core/types";
 
 export default class AppProvider {
-  constructor(protected app: ApplicationContract) {}
+  constructor(protected app: ApplicationService) {}
 
   public register() {
     // Register your own bindings

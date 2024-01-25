@@ -1,5 +1,5 @@
 import Tag from '../../app/Models/Tag'
-import Factory from '@ioc:Adonis/Lucid/Factory'
+import Factory from '@adonisjs/lucid/factories'
 import { ArticleFactory } from './ArticleFactory'
 
 export default Factory.define(Tag, ({ faker }) => {

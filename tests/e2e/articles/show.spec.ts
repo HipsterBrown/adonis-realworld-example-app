@@ -1,4 +1,4 @@
-import Database from '@ioc:Adonis/Lucid/Database'
+import db from '@adonisjs/lucid/services/db'
 import { test } from '@japa/runner'
 import { ArticleFactory } from '#database/factories/ArticleFactory'
 import { ProfileFactory } from '#database/factories/ProfileFactory'
@@ -7,10 +7,10 @@ import Article from '#app/Models/Article'
 
 test.group('articles/show', (group) => {
   group.each.setup(async () => {
-    await Database.beginGlobalTransaction()
+    await db.beginGlobalTransaction()
 
     return async () => {
-      await Database.rollbackGlobalTransaction()
+      await db.rollbackGlobalTransaction()
     }
   })
 

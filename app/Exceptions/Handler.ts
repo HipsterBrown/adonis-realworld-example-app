@@ -13,10 +13,10 @@
 |
 */
 
-import Logger from '@ioc:Adonis/Core/Logger'
-import HttpExceptionHandler from '@ioc:Adonis/Core/HttpExceptionHandler'
+import logger from '@adonisjs/core/services/logger'
+import { ExceptionHandler } from "@adonisjs/core/http";
 
-export default class ExceptionHandler extends HttpExceptionHandler {
+export default class ExceptionHandler extends ExceptionHandler {
   protected statusPages = {
     '403': 'errors/unauthorized',
     '404': 'errors/not-found',
@@ -24,6 +24,6 @@ export default class ExceptionHandler extends HttpExceptionHandler {
   }
 
   constructor() {
-    super(Logger)
+    super(logger)
   }
 }

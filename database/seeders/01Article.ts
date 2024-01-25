@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { DateTime } from 'luxon'
-import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
+import BaseSeeder from '@adonisjs/lucid/seeders'
 import Article from '../../app/Models/Article'
 import Profile from '../../app/Models/Profile'
 import Tag from '../../app/Models/Tag'

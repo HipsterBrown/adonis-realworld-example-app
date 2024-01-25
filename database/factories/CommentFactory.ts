@@ -1,5 +1,5 @@
 import Comment from '../../app/Models/Comment'
-import Factory from '@ioc:Adonis/Lucid/Factory'
+import Factory from '@adonisjs/lucid/factories'
 import { ArticleFactory } from './ArticleFactory'
 import { ProfileFactory } from './ProfileFactory'
 

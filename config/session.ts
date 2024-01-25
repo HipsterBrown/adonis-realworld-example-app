@@ -5,8 +5,8 @@
  * file.
  */
 
-import Env from '@ioc:Adonis/Core/Env'
-import Application from '@ioc:Adonis/Core/Application'
+import env from '#start/env'
+import app from '@adonisjs/core/services/app'
 import { sessionConfig } from '@adonisjs/session/build/config'
 
 export default sessionConfig({
@@ -36,7 +36,7 @@ export default sessionConfig({
   | Note: Switching drivers will make existing sessions invalid.
   |
   */
-  driver: Env.get('SESSION_DRIVER'),
+  driver: env.get('SESSION_DRIVER'),
 
   /*
   |--------------------------------------------------------------------------
@@ -100,7 +100,7 @@ export default sessionConfig({
   |
   */
   file: {
-    location: Application.tmpPath('sessions'),
+    location: app.tmpPath('sessions'),
   },
 
   /*

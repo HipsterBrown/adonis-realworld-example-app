@@ -1,8 +1,9 @@
-import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { schema } from '@adonisjs/validator'
+import type { HttpContext } from '@adonisjs/core/http'
+import { CustomMessages } from "@adonisjs/validator/types";
 
 export default class CreateArticleValidator {
-  constructor(protected ctx: HttpContextContract) {}
+  constructor(protected ctx: HttpContext) {}
 
   /*
    * Define schema to validate the "shape", "type", "formatting" and "integrity" of data.

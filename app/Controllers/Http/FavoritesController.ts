@@ -1,9 +1,9 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import type { HttpContext } from '@adonisjs/core/http'
 import Article from '../../Models/Article'
 import Favorite from '../../Models/Favorite'
 
 export default class FavoritesController {
-  public async create({ params, response, auth }: HttpContextContract) {
+  public async create({ params, response, auth }: HttpContext) {
     if (!auth.user) return response.unauthorized()
     const profile = await auth.user.related('profile').query().firstOrFail()
     const article = await Article.findByOrFail('slug', params.slug)
@@ -13,7 +13,7 @@ export default class FavoritesController {
     return response.redirect().back()
   }
 
-  public async destroy({ params, response, auth }: HttpContextContract) {
+  public async destroy({ params, response, auth }: HttpContext) {
     if (!auth.user) return response.unauthorized()
     const profile = await auth.user.related('profile').query().firstOrFail()
     const article = await Article.findByOrFail('slug', params.slug)

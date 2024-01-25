@@ -1,11 +1,11 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import type { HttpContext } from '@adonisjs/core/http'
 import Article from '../../Models/Article'
 import Comment from '../../Models/Comment'
 
 export default class CommentsController {
-  public async index({}: HttpContextContract) {}
+  public async index({}: HttpContext) {}
 
-  public async create({ params, request, response, auth }: HttpContextContract) {
+  public async create({ params, request, response, auth }: HttpContext) {
     const article = await Article.findByOrFail('slug', params.slug)
     const author = await auth.user?.related('profile').query().first()
     const body = request.input('body')
@@ -13,13 +13,13 @@ export default class CommentsController {
     return response.redirect().back()
   }
 
-  public async edit({ view, params }: HttpContextContract) {
+  public async edit({ view, params }: HttpContext) {
     const comment = await Comment.findOrFail(params.id)
     await comment.load('article')
     return view.render('comments/edit', { comment })
   }
 
-  public async update({ params, request, response, auth }: HttpContextContract) {
+  public async update({ params, request, response, auth }: HttpContext) {
     const comment = await Comment.findOrFail(params.id)
 
     if (comment.authorId !== (await auth.user?.related('profile').query().first())?.id) {
@@ -33,7 +33,7 @@ export default class CommentsController {
       .toRoute('articles.show', await comment.related('article').query().firstOrFail())
   }
 
-  public async destroy({ params, response, auth }: HttpContextContract) {
+  public async destroy({ params, response, auth }: HttpContext) {
     const comment = await Comment.findOrFail(params.id)
 
     if (comment.authorId !== (await auth.user?.related('profile').query().first())?.id) {

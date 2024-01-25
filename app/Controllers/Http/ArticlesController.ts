@@ -1,4 +1,4 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import type { HttpContext } from '@adonisjs/core/http'
 import Article from '../../Models/Article'
 import Follow from '../../Models/Follow'
 import Profile from '../../Models/Profile'
@@ -6,7 +6,7 @@ import Tag from '../../Models/Tag'
 import CreateArticleValidator from '../../Validators/CreateArticleValidator'
 
 export default class ArticlesController {
-  public async index({ view, request, auth }: HttpContextContract) {
+  public async index({ view, request, auth }: HttpContext) {
     const { filterBy, tag } = request.qs()
     const page = request.input('page', 1)
     const limit = 10
@@ -39,11 +39,11 @@ export default class ArticlesController {
     })
   }
 
-  public async new({ view }: HttpContextContract) {
+  public async new({ view }: HttpContext) {
     return view.render('articles/new')
   }
 
-  public async create({ auth, request, response }: HttpContextContract) {
+  public async create({ auth, request, response }: HttpContext) {
     const { tags, ...values } = await request.validate(CreateArticleValidator)
     const article = await auth.user?.related('articles').create(values)
 
@@ -58,7 +58,7 @@ export default class ArticlesController {
     return response.redirect().toRoute('articles.show', article)
   }
 
-  public async show({ request, view }: HttpContextContract) {
+  public async show({ request, view }: HttpContext) {
     const article = await Article.findByOrFail('slug', request.param('slug'))
     await article.load((loader) => {
       loader
@@ -74,7 +74,7 @@ export default class ArticlesController {
     return view.render('articles/show', { article })
   }
 
-  public async edit({ auth, request, view, session, response }: HttpContextContract) {
+  public async edit({ auth, request, view, session, response }: HttpContext) {
     const article = await auth.user
       ?.related('articles')
       .query()
@@ -90,7 +90,7 @@ export default class ArticlesController {
     return view.render('articles/edit', { article })
   }
 
-  public async update({ auth, request, session, response }: HttpContextContract) {
+  public async update({ auth, request, session, response }: HttpContext) {
     const article = await auth.user
       ?.related('articles')
       .query()
@@ -114,7 +114,7 @@ export default class ArticlesController {
     return response.redirect().toRoute('articles.show', { slug: request.param('slug') })
   }
 
-  public async destroy({ auth, request, session, response }: HttpContextContract) {
+  public async destroy({ auth, request, session, response }: HttpContext) {
     const article = await auth.user
       ?.related('articles')
       .query()
