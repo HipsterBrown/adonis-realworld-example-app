@@ -1,6 +1,6 @@
 import Database from '@ioc:Adonis/Lucid/Database'
 import { test } from '@japa/runner'
-import User from 'App/Models/User'
+import User from '#app/Models/User'
 
 test.group('users/new', (group) => {
   group.each.setup(async () => {

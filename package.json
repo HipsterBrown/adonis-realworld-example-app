@@ -65,5 +65,20 @@
     "sanitize-html": "^2.10.0",
     "sqlite3": "^5.1.6"
   },
-  "type": "module"
+  "type": "module",
+  "imports": {
+    "#controllers/*": "./app/controllers/*.js",
+    "#exceptions/*": "./app/exceptions/*.js",
+    "#models/*": "./app/models/*.js",
+    "#services/*": "./app/services/*.js",
+    "#listeners/*": "./app/listeners/*.js",
+    "#events/*": "./app/events/*.js",
+    "#middleware/*": "./app/middleware/*.js",
+    "#validators/*": "./app/validators/*.js",
+    "#start/*": "./start/*.js",
+    "#config/*": "./config/*.js",
+    "#app/*": "./app/*.js",
+    "#database/*": "./database/*.js",
+    "#contracts/*": "./contracts/*.js"
+  }
 }

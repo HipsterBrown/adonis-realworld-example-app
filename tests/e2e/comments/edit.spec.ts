@@ -1,8 +1,8 @@
 import Database from '@ioc:Adonis/Lucid/Database'
 import { test } from '@japa/runner'
-import { ArticleFactory } from 'Database/factories/ArticleFactory'
-import { CommentFactory } from 'Database/factories/CommentFactory'
-import { ProfileFactory } from 'Database/factories/ProfileFactory'
+import { ArticleFactory } from '#database/factories/ArticleFactory'
+import { CommentFactory } from '#database/factories/CommentFactory'
+import { ProfileFactory } from '#database/factories/ProfileFactory'
 
 test.group('comments/edit', (group) => {
   group.each.setup(async () => {
