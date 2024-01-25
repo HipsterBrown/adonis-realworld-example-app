@@ -22,7 +22,8 @@ export default class CommentsController {
   public async update({ params, request, response, auth }: HttpContext) {
     const comment = await Comment.findOrFail(params.id)
 
-    if (comment.authorId !== (await auth.user?.related('profile').query().first())?.id) {
+    const currentProfile = await auth.user?.related('profile').query().first()
+    if (comment.authorId !== currentProfile?.id) {
       return response.unauthorized()
     }
 
@@ -36,7 +37,8 @@ export default class CommentsController {
   public async destroy({ params, response, auth }: HttpContext) {
     const comment = await Comment.findOrFail(params.id)
 
-    if (comment.authorId !== (await auth.user?.related('profile').query().first())?.id) {
+    const currentProfile = await auth.user?.related('profile').query().first()
+    if (comment.authorId !== currentProfile?.id) {
       return response.unauthorized()
     }
 

@@ -49,10 +49,8 @@ test.group('profiles/edit', (group) => {
     await profile.refresh()
     assert.equal(profile.name, 'NewName')
     assert.equal(profile.bio, 'I am a brand new me!')
-    assert.equal(
-      (await profile.related('user').query().firstOrFail()).email,
-      'new.person@example.com'
-    )
+    const profileUser = await profile.related('user').query().firstOrFail()
+    assert.equal(profileUser.email, 'new.person@example.com')
 
     assert.equal(await nameInput.inputValue(), 'NewName')
     assert.equal(await bioInput.inputValue(), 'I am a brand new me!')

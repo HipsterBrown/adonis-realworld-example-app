@@ -1,4 +1,4 @@
-import { defineConfig } from "@adonisjs/core/app";
+import { defineConfig } from '@adonisjs/core/app'
 
 export default defineConfig({
   /*
@@ -19,10 +19,7 @@ export default defineConfig({
   | List of modules to import before starting the application.
   |
   */
-  preloads: [
-    () => import('./start/routes.js'),
-    () => import('./start/kernel.js')
-  ],
+  preloads: [() => import('./start/routes.js'), () => import('./start/kernel.js')],
   /*
   |--------------------------------------------------------------------------
   | Service providers
@@ -36,23 +33,23 @@ export default defineConfig({
     () => import('./providers/AppProvider.js'),
     () => import('@adonisjs/core/providers/app_provider'),
     () => import('@adonisjs/core/providers/hash_provider'),
-    { "file": () => import('@adonisjs/core/providers/repl_provider'), "environment": ["repl", "test"] },
+    { file: () => import('@adonisjs/core/providers/repl_provider'), environment: ['repl', 'test'] },
     () => import('@adonisjs/session/session_provider'),
     () => import('@adonisjs/core/providers/edge_provider'),
     () => import('@adonisjs/shield/shield_provider'),
     () => import('@adonisjs/lucid/database_provider'),
     () => import('@adonisjs/auth/auth_provider'),
-    () => import('@adonisjs/lucid-slugify')
+    () => import('@adonisjs/lucid-slugify'),
   ],
   metaFiles: [
     {
-      "pattern": "public/**",
-      "reloadServer": false
+      pattern: 'public/**',
+      reloadServer: false,
     },
     {
-      "pattern": "resources/views/**/*.edge",
-      "reloadServer": false
-    }
+      pattern: 'resources/views/**/*.edge',
+      reloadServer: false,
+    },
   ],
   /*
   |--------------------------------------------------------------------------
@@ -64,21 +61,17 @@ export default defineConfig({
   |
   */
   tests: {
-    "suites": [
+    suites: [
       {
-        "name": "functional",
-        "files": [
-          "tests/functional/**/*.spec(.ts|.js)"
-        ],
-        "timeout": 60000
+        name: 'functional',
+        files: ['tests/functional/**/*.spec(.ts|.js)'],
+        timeout: 60000,
       },
       {
-        "name": "e2e",
-        "files": [
-          "tests/e2e/**/*.spec.ts"
-        ],
-        "timeout": 100000
-      }
-    ]
-  }
-});
+        name: 'e2e',
+        files: ['tests/e2e/**/*.spec.ts'],
+        timeout: 100000,
+      },
+    ],
+  },
+})

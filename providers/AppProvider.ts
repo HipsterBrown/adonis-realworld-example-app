@@ -1,7 +1,7 @@
 import sanitizeHTML from 'sanitize-html'
 import { marked } from 'marked'
 import { DateTime } from 'luxon'
-import { ApplicationService } from "@adonisjs/core/types";
+import { ApplicationService } from '@adonisjs/core/types'
 
 export default class AppProvider {
   constructor(protected app: ApplicationService) {}

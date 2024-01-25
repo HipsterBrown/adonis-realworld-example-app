@@ -14,7 +14,7 @@
 */
 
 import logger from '@adonisjs/core/services/logger'
-import { ExceptionHandler } from "@adonisjs/core/http";
+import { ExceptionHandler } from '@adonisjs/core/http'
 
 export default class ExceptionHandler extends ExceptionHandler {
   protected statusPages = {

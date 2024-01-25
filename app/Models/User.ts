@@ -1,16 +1,10 @@
 import { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
-import {
-  column,
-  beforeSave,
-  BaseModel,
-  hasOne,
-  hasMany
-} from '@adonisjs/lucid/orm'
+import { column, beforeSave, BaseModel, hasOne, hasMany } from '@adonisjs/lucid/orm'
 import Profile from './Profile.js'
 import Article from './Article.js'
-import { HasOne } from "@adonisjs/lucid/types/relations";
-import { HasMany } from "@adonisjs/lucid/types/relations";
+import { HasOne } from '@adonisjs/lucid/types/relations'
+import { HasMany } from '@adonisjs/lucid/types/relations'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })

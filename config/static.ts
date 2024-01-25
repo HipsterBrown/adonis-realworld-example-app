@@ -1,4 +1,4 @@
-import { defineConfig } from "@adonisjs/static";
+import { defineConfig } from '@adonisjs/static'
 
 const staticConfig = defineConfig({
   /*

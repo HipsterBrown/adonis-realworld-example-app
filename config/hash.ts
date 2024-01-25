@@ -6,8 +6,8 @@
  */
 
 import env from '#start/env'
-import { defineConfig } from "@adonisjs/core/hash";
-import { drivers } from "@adonisjs/core/hash";
+import { defineConfig } from '@adonisjs/core/hash'
+import { drivers } from '@adonisjs/core/hash'
 
 /*
 |--------------------------------------------------------------------------
@@ -71,7 +71,6 @@ export default defineConfig({
   },
 })
 
-
 declare module '@adonisjs/core/types' {
-  export interface HashersList extends InferHashers<typeof hashConfig> { }
+  export interface HashersList extends InferHashers<typeof hashConfig> {}
 }

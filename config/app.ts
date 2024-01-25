@@ -10,10 +10,10 @@ import env from '#start/env'
 import app from '@adonisjs/core/services/app'
 import { ProfilerConfig } from '@ioc:Adonis/Core/Profiler'
 import { AssetsManagerConfig } from '@ioc:Adonis/Core/AssetsManager'
-import { ServerConfig } from "@adonisjs/core/services/server";
-import { LoggerConfig } from "@adonisjs/core/types/logger";
-import { ValidatorConfig } from "@adonisjs/validator/types";
-import { defineConfig } from "@adonisjs/core/http";
+import { ServerConfig } from '@adonisjs/core/services/server'
+import { LoggerConfig } from '@adonisjs/core/types/logger'
+import { ValidatorConfig } from '@adonisjs/validator/types'
+import { defineConfig } from '@adonisjs/core/http'
 
 /*
 |--------------------------------------------------------------------------
