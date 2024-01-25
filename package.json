@@ -14,33 +14,22 @@
   },
   "eslintConfig": {
     "extends": [
-      "plugin:adonis/typescriptApp",
-      "prettier"
-    ],
-    "plugins": [
-      "prettier"
+      "@adonisjs/eslint-config/app"
     ],
     "rules": {
-      "prettier/prettier": [
-        "error"
-      ]
+      "@typescript-eslint/explicit-member-accessibility": "off",
+      "unicorn/filename-case": "off",
+      "@typescript-eslint/no-shadow": "off"
     }
   },
   "eslintIgnore": [
     "build"
   ],
-  "prettier": {
-    "trailingComma": "es5",
-    "semi": false,
-    "singleQuote": true,
-    "useTabs": false,
-    "quoteProps": "consistent",
-    "bracketSpacing": true,
-    "arrowParens": "always",
-    "printWidth": 100
-  },
+  "prettier": "@adonisjs/prettier-config",
   "devDependencies": {
     "@adonisjs/assembler": "^7.1.0",
+    "@adonisjs/eslint-config": "^1.2.1",
+    "@adonisjs/prettier-config": "^1.2.1",
     "@adonisjs/tsconfig": "^1.2.1",
     "@faker-js/faker": "^7.5.0",
     "@japa/browser-client": "^2.0.2",
@@ -50,13 +39,10 @@
     "@types/luxon": "^3.4.2",
     "@types/marked": "^4.0.6",
     "@types/sanitize-html": "^2.6.2",
-    "eslint": "^8.38.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-adonis": "^2.1.1",
-    "eslint-plugin-prettier": "^4.2.1",
+    "eslint": "^8.56.0",
     "pino-pretty": "^10.3.1",
     "playwright": "^1.32.2",
-    "prettier": "^2.8.7",
+    "prettier": "^3.2.4",
     "ts-node": "^10.9.2",
     "typescript": "~4.8.2"
   },
