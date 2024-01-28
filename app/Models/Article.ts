@@ -1,20 +1,14 @@
 import { DateTime } from 'luxon'
-import {
-  BaseModel,
-  BelongsTo,
-  belongsTo,
-  column,
-  HasMany,
-  hasMany,
-  ManyToMany,
-  manyToMany,
-} from '@ioc:Adonis/Lucid/Orm'
-import User from './User'
+import { BaseModel, belongsTo, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
+import User from './User.js'
 import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
-import Tag from './Tag'
-import Profile from './Profile'
-import Comment from './Comment'
-import Favorite from './Favorite'
+import Tag from './Tag.js'
+import Profile from './Profile.js'
+import Comment from './Comment.js'
+import Favorite from './Favorite.js'
+import { BelongsTo } from '@adonisjs/lucid/types/relations'
+import { HasMany } from '@adonisjs/lucid/types/relations'
+import { ManyToMany } from '@adonisjs/lucid/types/relations'
 
 export default class Article extends BaseModel {
   @column({ isPrimary: true })

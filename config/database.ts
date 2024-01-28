@@ -5,11 +5,12 @@
  * file.
  */
 
-import Env from '@ioc:Adonis/Core/Env'
-import Application from '@ioc:Adonis/Core/Application'
-import { DatabaseConfig } from '@ioc:Adonis/Lucid/Database'
+import env from '#start/env'
+import app from '@adonisjs/core/services/app'
+import { DatabaseConfig } from '@adonisjs/lucid/database'
+import { defineConfig } from '@adonisjs/lucid'
 
-const databaseConfig: DatabaseConfig = {
+const databaseConfig = defineConfig({
   /*
   |--------------------------------------------------------------------------
   | Connection
@@ -20,7 +21,7 @@ const databaseConfig: DatabaseConfig = {
   | file.
   |
   */
-  connection: Env.get('DB_CONNECTION'),
+  connection: env.get('DB_CONNECTION'),
 
   connections: {
     /*
@@ -38,9 +39,9 @@ const databaseConfig: DatabaseConfig = {
       client: 'sqlite',
       connection: {
         filename:
-          Env.get('NODE_ENV') === 'test'
-            ? Application.tmpPath('testdb.sqlite3')
-            : Application.tmpPath('db.sqlite3'),
+          env.get('NODE_ENV') === 'test'
+            ? app.tmpPath('testdb.sqlite3')
+            : app.tmpPath('db.sqlite3'),
       },
       pool: {
         afterCreate: (conn, cb) => {
@@ -55,6 +56,6 @@ const databaseConfig: DatabaseConfig = {
       debug: false,
     },
   },
-}
+})
 
 export default databaseConfig

@@ -1,16 +1,11 @@
 import { DateTime } from 'luxon'
-import {
-  BaseModel,
-  BelongsTo,
-  belongsTo,
-  column,
-  HasManyThrough,
-  hasManyThrough,
-} from '@ioc:Adonis/Lucid/Orm'
-import User from './User'
-import Article from './Article'
-import Favorite from './Favorite'
-import Follow from './Follow'
+import { BaseModel, belongsTo, column, hasManyThrough } from '@adonisjs/lucid/orm'
+import User from './User.js'
+import Article from './Article.js'
+import Favorite from './Favorite.js'
+import Follow from './Follow.js'
+import { BelongsTo } from '@adonisjs/lucid/types/relations'
+import { HasManyThrough } from '@adonisjs/lucid/types/relations'
 
 export default class Profile extends BaseModel {
   @column({ isPrimary: true })

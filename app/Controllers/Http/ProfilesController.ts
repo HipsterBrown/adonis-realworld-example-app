@@ -1,10 +1,10 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Article from '../../Models/Article'
-import Profile from '../../Models/Profile'
-import UpdateProfileValidator from '../../Validators/UpdateProfileValidator'
+import type { HttpContext } from '@adonisjs/core/http'
+import Article from '../../Models/Article.js'
+import Profile from '../../Models/Profile.js'
+import UpdateProfileValidator from '../../Validators/UpdateProfileValidator.js'
 
 export default class ProfilesController {
-  public async show({ view, params, request }: HttpContextContract) {
+  public async show({ view, params, request }: HttpContext) {
     const profile = await Profile.findByOrFail('name', decodeURIComponent(params.name))
     const showFavorites = request.matchesRoute('profiles.show.favorites')
     let articles: Article[]
@@ -27,13 +27,13 @@ export default class ProfilesController {
     return view.render('profiles/show', { profile, articles, showFavorites })
   }
 
-  public async edit({ auth, view }: HttpContextContract) {
+  public async edit({ auth, view }: HttpContext) {
     let profile = await Profile.findBy('userId', auth.user?.id)
     await profile?.load('user')
     return view.render('profiles/edit', { profile })
   }
 
-  public async update({ auth, request, response }: HttpContextContract) {
+  public async update({ auth, request, response }: HttpContext) {
     const { email, password, ...profileValues } = await request.validate(UpdateProfileValidator)
     const profile = await Profile.findBy('userId', auth.user?.id)
     await profile?.merge(profileValues).save()

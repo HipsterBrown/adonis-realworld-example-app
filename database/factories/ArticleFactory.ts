@@ -1,9 +1,9 @@
-import Article from '../../app/Models/Article'
-import Factory from '@ioc:Adonis/Lucid/Factory'
-import { ProfileFactory, UserFactory } from './ProfileFactory'
-import TagFactory from './TagFactory'
-import { CommentFactory } from './CommentFactory'
-import Favorite from '../../app/Models/Favorite'
+import Article from '../../app/Models/Article.js'
+import Factory from '@adonisjs/lucid/factories'
+import { ProfileFactory, UserFactory } from './ProfileFactory.js'
+import TagFactory from './TagFactory.js'
+import { CommentFactory } from './CommentFactory.js'
+import Favorite from '../../app/Models/Favorite.js'
 
 export const FavoriteFactory = Factory.define(Favorite, () => {
   return {}

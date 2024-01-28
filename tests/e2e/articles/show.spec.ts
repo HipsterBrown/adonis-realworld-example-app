@@ -1,16 +1,16 @@
-import Database from '@ioc:Adonis/Lucid/Database'
+import db from '@adonisjs/lucid/services/db'
 import { test } from '@japa/runner'
-import { ArticleFactory } from 'Database/factories/ArticleFactory'
-import { ProfileFactory } from 'Database/factories/ProfileFactory'
-import { CommentFactory } from 'Database/factories/CommentFactory'
-import Article from 'App/Models/Article'
+import { ArticleFactory } from '#database/factories/ArticleFactory'
+import { ProfileFactory } from '#database/factories/ProfileFactory'
+import { CommentFactory } from '#database/factories/CommentFactory'
+import Article from '#app/Models/Article'
 
 test.group('articles/show', (group) => {
   group.each.setup(async () => {
-    await Database.beginGlobalTransaction()
+    await db.beginGlobalTransaction()
 
     return async () => {
-      await Database.rollbackGlobalTransaction()
+      await db.rollbackGlobalTransaction()
     }
   })
 

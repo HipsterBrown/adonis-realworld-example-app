@@ -1,12 +1,12 @@
-import Database from '@ioc:Adonis/Lucid/Database'
+import db from '@adonisjs/lucid/services/db'
 import { test } from '@japa/runner'
-import { ProfileFactory } from 'Database/factories/ProfileFactory'
+import { ProfileFactory } from '#database/factories/ProfileFactory'
 
 test.group('profiles/edit', (group) => {
   group.each.setup(async () => {
-    await Database.beginGlobalTransaction()
+    await db.beginGlobalTransaction()
 
-    return () => Database.rollbackGlobalTransaction()
+    return () => db.rollbackGlobalTransaction()
   })
 
   test('logged in user can edit their profile', async ({ assert, visit, browserContext }) => {
@@ -49,10 +49,8 @@ test.group('profiles/edit', (group) => {
     await profile.refresh()
     assert.equal(profile.name, 'NewName')
     assert.equal(profile.bio, 'I am a brand new me!')
-    assert.equal(
-      (await profile.related('user').query().firstOrFail()).email,
-      'new.person@example.com'
-    )
+    const profileUser = await profile.related('user').query().firstOrFail()
+    assert.equal(profileUser.email, 'new.person@example.com')
 
     assert.equal(await nameInput.inputValue(), 'NewName')
     assert.equal(await bioInput.inputValue(), 'I am a brand new me!')

@@ -1,13 +1,6 @@
-/**
- * Config source: https://git.io/Jfefl
- *
- * Feel free to let us know via PR, if you find something broken in this config
- * file.
- */
+import { defineConfig } from '@adonisjs/static'
 
-import { AssetsConfig } from '@ioc:Adonis/Core/Static'
-
-const staticConfig: AssetsConfig = {
+const staticConfig = defineConfig({
   /*
   |--------------------------------------------------------------------------
   | Enabled
@@ -84,6 +77,6 @@ const staticConfig: AssetsConfig = {
   |
   */
   immutable: false,
-}
+})
 
 export default staticConfig

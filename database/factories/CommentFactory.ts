@@ -1,7 +1,7 @@
-import Comment from '../../app/Models/Comment'
-import Factory from '@ioc:Adonis/Lucid/Factory'
-import { ArticleFactory } from './ArticleFactory'
-import { ProfileFactory } from './ProfileFactory'
+import Comment from '../../app/Models/Comment.js'
+import Factory from '@adonisjs/lucid/factories'
+import { ArticleFactory } from './ArticleFactory.js'
+import { ProfileFactory } from './ProfileFactory.js'
 
 export const CommentFactory = Factory.define(Comment, ({ faker }) => {
   return {

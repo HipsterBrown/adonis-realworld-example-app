@@ -1,12 +1,12 @@
-import Database from '@ioc:Adonis/Lucid/Database'
+import db from '@adonisjs/lucid/services/db'
 import { test } from '@japa/runner'
-import { ProfileFactory } from 'Database/factories/ProfileFactory'
+import { ProfileFactory } from '#database/factories/ProfileFactory'
 
 test.group('sessions/new', (group) => {
   group.each.setup(async () => {
-    await Database.beginGlobalTransaction()
+    await db.beginGlobalTransaction()
 
-    return () => Database.rollbackGlobalTransaction()
+    return () => db.rollbackGlobalTransaction()
   })
 
   test('user can log in', async ({ visit }) => {

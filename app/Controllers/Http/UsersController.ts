@@ -1,15 +1,15 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import User from '../../Models/User'
-import CreateUserValidator from '../../Validators/CreateUserValidator'
+import type { HttpContext } from '@adonisjs/core/http'
+import User from '../../Models/User.js'
+import CreateUserValidator from '../../Validators/CreateUserValidator.js'
 
 export default class UsersController {
-  public async index({}: HttpContextContract) {}
+  public async index({}: HttpContext) {}
 
-  public async new({ view }: HttpContextContract) {
+  public async new({ view }: HttpContext) {
     return view.render('users/new')
   }
 
-  public async create({ auth, request, response }: HttpContextContract) {
+  public async create({ auth, request, response }: HttpContext) {
     const { email, password, name } = await request.validate(CreateUserValidator)
 
     const user = await User.create({ email, password })
@@ -20,11 +20,11 @@ export default class UsersController {
     return response.redirect().toPath('/')
   }
 
-  public async show({}: HttpContextContract) {}
+  public async show({}: HttpContext) {}
 
-  public async edit({}: HttpContextContract) {}
+  public async edit({}: HttpContext) {}
 
-  public async update({}: HttpContextContract) {}
+  public async update({}: HttpContext) {}
 
-  public async destroy({}: HttpContextContract) {}
+  public async destroy({}: HttpContext) {}
 }

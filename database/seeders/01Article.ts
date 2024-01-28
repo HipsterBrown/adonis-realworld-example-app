@@ -1,10 +1,10 @@
 import { faker } from '@faker-js/faker'
 import { DateTime } from 'luxon'
-import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
-import Article from '../../app/Models/Article'
-import Profile from '../../app/Models/Profile'
-import Tag from '../../app/Models/Tag'
-import Follow from '../../app/Models/Follow'
+import BaseSeeder from '@adonisjs/lucid/seeders'
+import Article from '../../app/Models/Article.js'
+import Profile from '../../app/Models/Profile.js'
+import Tag from '../../app/Models/Tag.js'
+import Follow from '../../app/Models/Follow.js'
 
 export default class extends BaseSeeder {
   public async run() {

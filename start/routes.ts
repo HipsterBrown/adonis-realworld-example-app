@@ -18,42 +18,48 @@
 |
 */
 
-import Route from '@ioc:Adonis/Core/Route'
+import router from '@adonisjs/core/services/router'
 
-Route.get('/', 'ArticlesController.index').as('articles.index')
+router.get('/', 'ArticlesController.index').as('articles.index')
 
-Route.get('/register', 'UsersController.new').as('register')
-Route.post('/users', 'UsersController.create').as('users.create')
+router.get('/register', 'UsersController.new').as('register')
+router.post('/users', 'UsersController.create').as('users.create')
 
-Route.get('/login', 'SessionsController.new').as('login')
-Route.post('/sessions', 'SessionsController.create').as('sessions.create')
+router.get('/login', 'SessionsController.new').as('login')
+router.post('/sessions', 'SessionsController.create').as('sessions.create')
 
-Route.get('/articles/:slug', 'ArticlesController.show').as('articles.show')
+router.get('/articles/:slug', 'ArticlesController.show').as('articles.show')
 
-Route.get('/profiles/:name', 'ProfilesController.show').as('profiles.show')
-Route.get('/profiles/:name/favorites', 'ProfilesController.show').as('profiles.show.favorites')
+router.get('/profiles/:name', 'ProfilesController.show').as('profiles.show')
+router.get('/profiles/:name/favorites', 'ProfilesController.show').as('profiles.show.favorites')
 
-Route.group(() => {
-  Route.get('/settings', 'ProfilesController.edit').as('settings')
-  Route.patch('/profile', 'ProfilesController.update').as('profile.update')
+router
+  .group(() => {
+    router.get('/settings', 'ProfilesController.edit').as('settings')
+    router.patch('/profile', 'ProfilesController.update').as('profile.update')
 
-  Route.delete('/sessions', 'SessionsController.destroy').as('sessions.destroy')
+    router.delete('/sessions', 'SessionsController.destroy').as('sessions.destroy')
 
-  Route.get('/editor', 'ArticlesController.new').as('editor')
-  Route.get('/editor/:slug', 'ArticlesController.edit').as('articles.edit')
+    router.get('/editor', 'ArticlesController.new').as('editor')
+    router.get('/editor/:slug', 'ArticlesController.edit').as('articles.edit')
 
-  Route.post('/articles', 'ArticlesController.create').as('articles.create')
-  Route.patch('/articles/:slug', 'ArticlesController.update').as('articles.update')
-  Route.delete('/articles/:slug', 'ArticlesController.destroy').as('articles.destroy')
+    router.post('/articles', 'ArticlesController.create').as('articles.create')
+    router.patch('/articles/:slug', 'ArticlesController.update').as('articles.update')
+    router.delete('/articles/:slug', 'ArticlesController.destroy').as('articles.destroy')
 
-  Route.post('/articles/:slug/comments', 'CommentsController.create').as('comments.create')
-  Route.get('/articles/:slug/comments/:id', 'CommentsController.edit').as('comments.edit')
-  Route.patch('/articles/:slug/comments/:id', 'CommentsController.update').as('comments.update')
-  Route.delete('/articles/:slug/comments/:id', 'CommentsController.destroy').as('comments.destroy')
+    router.post('/articles/:slug/comments', 'CommentsController.create').as('comments.create')
+    router.get('/articles/:slug/comments/:id', 'CommentsController.edit').as('comments.edit')
+    router.patch('/articles/:slug/comments/:id', 'CommentsController.update').as('comments.update')
+    router
+      .delete('/articles/:slug/comments/:id', 'CommentsController.destroy')
+      .as('comments.destroy')
 
-  Route.post('/articles/:slug/favorites', 'FavoritesController.create').as('favorites.create')
-  Route.delete('/articles/:slug/favorites', 'FavoritesController.destroy').as('favorites.destroy')
+    router.post('/articles/:slug/favorites', 'FavoritesController.create').as('favorites.create')
+    router
+      .delete('/articles/:slug/favorites', 'FavoritesController.destroy')
+      .as('favorites.destroy')
 
-  Route.post('/profiles/:name/follow', 'FollowsController.create').as('profile.follow')
-  Route.delete('/profiles/:name/follow', 'FollowsController.destroy').as('profile.unfollow')
-}).middleware('auth')
+    router.post('/profiles/:name/follow', 'FollowsController.create').as('profile.follow')
+    router.delete('/profiles/:name/follow', 'FollowsController.destroy').as('profile.unfollow')
+  })
+  .middleware('auth')
